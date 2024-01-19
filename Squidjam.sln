@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Squidjam.Game", "src\Squidjam.Game\Squidjam.Game.fsproj", "{769EC5D8-CCBF-4748-A598-EF4CDF60C214}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Squidjam.Game.Tests", "tests\Squidjam.Game.Tests\Squidjam.Game.Tests.fsproj", "{9C2EE1F5-5B22-4324-A3CD-E310E7B28107}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -10,5 +14,15 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{769EC5D8-CCBF-4748-A598-EF4CDF60C214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{769EC5D8-CCBF-4748-A598-EF4CDF60C214}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{769EC5D8-CCBF-4748-A598-EF4CDF60C214}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{769EC5D8-CCBF-4748-A598-EF4CDF60C214}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C2EE1F5-5B22-4324-A3CD-E310E7B28107}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C2EE1F5-5B22-4324-A3CD-E310E7B28107}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C2EE1F5-5B22-4324-A3CD-E310E7B28107}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C2EE1F5-5B22-4324-A3CD-E310E7B28107}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
