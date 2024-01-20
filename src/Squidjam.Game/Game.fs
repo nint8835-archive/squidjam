@@ -11,4 +11,4 @@ type Player = { id: Guid }
 
 type Game =
     { state: GameState
-      players: Map<Guid, Player> }
+      players: Player array }

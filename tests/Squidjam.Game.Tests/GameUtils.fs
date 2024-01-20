@@ -5,22 +5,15 @@ open NUnit.Framework
 
 open Squidjam.Game
 
-let player1Id = Guid.NewGuid()
-let player2Id = Guid.NewGuid()
-
 let exampleGame =
     { state = PlayerTurn 0
       players =
-        Map [ (player1Id, { id = player1Id })
-              (player2Id, { id = player2Id }) ] }
+        [| { id = Guid.NewGuid() }
+           { id = Guid.NewGuid() } |] }
 
 [<Test>]
-let GetPlayerByIndex () =
-    let secondPlayer =
-        exampleGame.players
-        |> Map.values
-        |> Seq.skip 1
-        |> Seq.head
+let GetPlayerById () =
+    let secondPlayer = exampleGame.players[1]
 
-    let player = GameUtils.GetPlayerByIndex exampleGame 1
+    let player = GameUtils.GetPlayerById exampleGame secondPlayer.id
     Assert.AreEqual(secondPlayer, player)

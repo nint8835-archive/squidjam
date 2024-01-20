@@ -1,7 +1,6 @@
 module Squidjam.Game.GameUtils
 
-let GetPlayerByIndex (game: Game) (index: int) =
-    game.players
-    |> Map.toList
-    |> List.item index
-    |> snd
+open System
+
+let GetPlayerById (game: Game) (id: Guid) : Player =
+    game.players |> Array.find (fun p -> p.id = id)
