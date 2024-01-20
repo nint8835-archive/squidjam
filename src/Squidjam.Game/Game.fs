@@ -8,7 +8,7 @@ type GameState =
     | Ended of Guid option
 
 
-type Player = { id: Guid }
+type Player = { id: Guid; ready: bool }
 
 type Game =
     { id: Guid

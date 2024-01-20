@@ -4,12 +4,16 @@ open System
 open System.Security.Cryptography
 
 type Action =
-    | EndTurn
+    | EndTurn of Player
     | AddPlayer of Player
 
-let endTurn (game: Game) : Result<Game, string> =
+let endTurn (game: Game) (player: Player) : Result<Game, string> =
     match game.state with
-    | PlayerTurn playerIndex -> Ok { game with state = PlayerTurn((playerIndex + 1) % game.players.Length) }
+    | PlayerTurn playerIndex ->
+        if GameUtils.GetPlayerIndex game player.id = playerIndex then
+            Ok { game with state = PlayerTurn((playerIndex + 1) % game.players.Length) }
+        else
+            Error "You cannot end the turn when it is not your turn"
     | _ -> Error $"Unable to end turn in game state %s{game.state.GetType().Name}"
 
 let addPlayer (game: Game) (player: Player) : Result<Game, string> =
@@ -35,5 +39,5 @@ let addPlayer (game: Game) (player: Player) : Result<Game, string> =
 
 let Apply (game: Game) (action: Action) : Result<Game, string> =
     match action with
-    | EndTurn -> endTurn game
+    | EndTurn player -> endTurn game player
     | AddPlayer player -> addPlayer game player
