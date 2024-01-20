@@ -11,8 +11,12 @@ let ``Ready Player`` () =
         { Id = Guid.NewGuid()
           State = PlayerRegistration
           Players =
-            [| { Id = Guid.NewGuid(); Ready = false }
-               { Id = Guid.NewGuid(); Ready = false } |] }
+            [| { Id = Guid.NewGuid()
+                 Ready = false
+                 Class = Some Grack }
+               { Id = Guid.NewGuid()
+                 Ready = false
+                 Class = Some Grack } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
 
@@ -27,7 +31,10 @@ let ``Single Player Readying Doesn't Start Game`` () =
     let initialGame =
         { Id = Guid.NewGuid()
           State = PlayerRegistration
-          Players = [| { Id = Guid.NewGuid(); Ready = false } |] }
+          Players =
+            [| { Id = Guid.NewGuid()
+                 Ready = false
+                 Class = Some Grack } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
 
@@ -43,8 +50,12 @@ let ``All Players Readying Starts Game`` () =
         { Id = Guid.NewGuid()
           State = PlayerRegistration
           Players =
-            [| { Id = Guid.NewGuid(); Ready = false }
-               { Id = Guid.NewGuid(); Ready = true } |] }
+            [| { Id = Guid.NewGuid()
+                 Ready = false
+                 Class = Some Grack }
+               { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = Some Grack } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
 
@@ -53,6 +64,22 @@ let ``All Players Readying Starts Game`` () =
         Assert.AreEqual(g.Players[0], { initialGame.Players[0] with Ready = true })
         Assert.AreEqual(g.State, PlayerTurn(0))
     | Error e -> Assert.Fail(e)
+
+[<Test>]
+let ``Cannot Ready Without Class Selected`` () =
+    let initialGame =
+        { Id = Guid.NewGuid()
+          State = PlayerRegistration
+          Players =
+            [| { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = None } |] }
+
+    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
+
+    match game with
+    | Ok g -> Assert.Fail("Should not be able to ready player without class selected")
+    | Error e -> Assert.AreEqual(e, "You must select a class before you can ready")
 
 
 let invalidStates =
@@ -67,7 +94,10 @@ let ``Invalid State`` (state: GameState) =
     let initialGame =
         { Id = Guid.NewGuid()
           State = state
-          Players = [| { Id = Guid.NewGuid(); Ready = true } |] }
+          Players =
+            [| { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = Some Grack } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
 

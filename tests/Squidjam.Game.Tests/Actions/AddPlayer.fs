@@ -20,7 +20,12 @@ let ``Invalid State`` (state: GameState) =
           Players = [||] }
 
     let game =
-        Actions.Apply initialGame (Actions.AddPlayer { Id = Guid.NewGuid(); Ready = false })
+        Actions.Apply
+            initialGame
+            (Actions.AddPlayer
+                { Id = Guid.NewGuid()
+                  Ready = false
+                  Class = None })
 
     match game with
     | Ok g -> Assert.Fail($"Should not be able to add player in %s{stateName} state")
@@ -33,7 +38,10 @@ let ``Single Player`` () =
           State = PlayerRegistration
           Players = [||] }
 
-    let newPlayer = { Id = Guid.NewGuid(); Ready = false }
+    let newPlayer =
+        { Id = Guid.NewGuid()
+          Ready = false
+          Class = None }
 
     let game = Actions.Apply initialGame (Actions.AddPlayer newPlayer)
 
@@ -50,15 +58,18 @@ let ``Multiple Players Are Shuffled`` () =
 
     let player1 =
         { Id = Guid("01fa5247-91c6-4c8a-8f7b-3b4f7d5c6f6e")
-          Ready = false }
+          Ready = false
+          Class = None }
 
     let player2 =
         { Id = Guid("fc2d0e31-e2e1-4329-8d67-5bce12ea2d88")
-          Ready = false }
+          Ready = false
+          Class = None }
 
     let player3 =
         { Id = Guid("338a4db6-25d7-4910-80d7-98bf3b3ad31c")
-          Ready = false }
+          Ready = false
+          Class = None }
 
     let gameWith1Player = Actions.Apply initialGame (Actions.AddPlayer player1)
 

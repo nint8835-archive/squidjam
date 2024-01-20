@@ -11,8 +11,12 @@ let ``First Player`` () =
         { Id = Guid.NewGuid()
           State = PlayerTurn(0)
           Players =
-            [| { Id = Guid.NewGuid(); Ready = true }
-               { Id = Guid.NewGuid(); Ready = true } |] }
+            [| { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = Some Grack }
+               { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = Some Grack } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0])
 
@@ -26,8 +30,12 @@ let ``Last Player`` () =
         { Id = Guid.NewGuid()
           State = PlayerTurn(1)
           Players =
-            [| { Id = Guid.NewGuid(); Ready = true }
-               { Id = Guid.NewGuid(); Ready = true } |] }
+            [| { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = Some Grack }
+               { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = Some Grack } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[1])
 
@@ -41,8 +49,12 @@ let ``Not Player's Turn`` () =
         { Id = Guid.NewGuid()
           State = PlayerTurn(1)
           Players =
-            [| { Id = Guid.NewGuid(); Ready = true }
-               { Id = Guid.NewGuid(); Ready = true } |] }
+            [| { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = Some Grack }
+               { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = Some Grack } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0])
 
@@ -62,7 +74,10 @@ let ``Invalid State`` (state: GameState) =
     let initialGame =
         { Id = Guid.NewGuid()
           State = state
-          Players = [| { Id = Guid.NewGuid(); Ready = true } |] }
+          Players =
+            [| { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = Some Grack } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0])
 

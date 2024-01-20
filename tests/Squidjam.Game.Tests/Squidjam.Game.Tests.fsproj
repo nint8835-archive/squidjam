@@ -13,6 +13,7 @@
         <Compile Include="Actions\EndTurn.fs"/>
         <Compile Include="Actions\AddPlayer.fs"/>
         <Compile Include="Actions\Ready.fs"/>
+        <Compile Include="Actions\SelectClass.fs"/>
         <Compile Include="Program.fs"/>
     </ItemGroup>
 

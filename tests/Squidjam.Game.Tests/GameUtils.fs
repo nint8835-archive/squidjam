@@ -9,8 +9,12 @@ let exampleGame =
     { Id = Guid.NewGuid()
       State = PlayerTurn 0
       Players =
-        [| { Id = Guid.NewGuid(); Ready = true }
-           { Id = Guid.NewGuid(); Ready = true } |] }
+        [| { Id = Guid.NewGuid()
+             Ready = true
+             Class = Some Grack }
+           { Id = Guid.NewGuid()
+             Ready = true
+             Class = Some Grack } |] }
 
 [<Test>]
 let GetPlayerById () =
