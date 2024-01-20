@@ -5,6 +5,40 @@ open NUnit.Framework
 
 open Squidjam.Game
 
+[<Test>]
+let ``With No Current Class`` () =
+    let initialGame =
+        { Id = Guid.NewGuid()
+          State = PlayerRegistration
+          Players =
+            [| { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = None } |] }
+
+    let game =
+        Actions.Apply initialGame (Actions.SelectClass(initialGame.Players[0], Grack))
+
+    match game with
+    | Ok g -> Assert.AreEqual(g.Players[0].Class, Some Grack)
+    | Error e -> Assert.Fail(e)
+
+[<Test>]
+let ``With Current Class`` () =
+    let initialGame =
+        { Id = Guid.NewGuid()
+          State = PlayerRegistration
+          Players =
+            [| { Id = Guid.NewGuid()
+                 Ready = true
+                 Class = Some Grack } |] }
+
+    let game =
+        Actions.Apply initialGame (Actions.SelectClass(initialGame.Players[0], Gump))
+
+    match game with
+    | Ok g -> Assert.AreEqual(g.Players[0].Class, Some Gump)
+    | Error e -> Assert.Fail(e)
+
 let invalidStates =
     [| Ended(None); PlayerTurn(0) |]
     |> Array.map (fun state -> TestCaseData(state))
