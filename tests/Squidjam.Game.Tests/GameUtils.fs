@@ -25,3 +25,12 @@ let GetPlayerIndex () =
 
     let index = GameUtils.GetPlayerIndex exampleGame secondPlayer.id
     Assert.AreEqual(1, index)
+
+[<Test>]
+let UpdatePlayer () =
+    let secondPlayer = exampleGame.players.[1]
+
+    let updatedGame =
+        GameUtils.UpdatePlayer exampleGame secondPlayer.id (fun p -> { p with ready = false })
+
+    Assert.AreEqual(updatedGame.players[1], { secondPlayer with ready = false })

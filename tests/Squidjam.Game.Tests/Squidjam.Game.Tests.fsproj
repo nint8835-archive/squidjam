@@ -12,6 +12,7 @@
         <Compile Include="GameUtils.fs"/>
         <Compile Include="Actions\EndTurn.fs"/>
         <Compile Include="Actions\AddPlayer.fs"/>
+        <Compile Include="Actions\Ready.fs"/>
         <Compile Include="Program.fs"/>
     </ItemGroup>
 
