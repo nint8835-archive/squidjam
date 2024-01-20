@@ -35,11 +35,7 @@ let ``Last Player`` () =
 
 [<Test>]
 let ``Invalid State`` () =
-    let p1Guid = Guid.NewGuid()
-
-    let initialGame =
-        { state = Ended(Some p1Guid)
-          players = [| { id = p1Guid } |] }
+    let initialGame = { state = Ended(None); players = [||] }
 
     let game = Actions.Apply initialGame Actions.EndTurn
 
