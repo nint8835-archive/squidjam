@@ -9,7 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="UnitTest1.fs"/>
+        <Compile Include="GameUtils.fs"/>
+        <Compile Include="Program.fs"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -21,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Squidjam.Game\Squidjam.Game.fsproj" />
+        <ProjectReference Include="..\..\src\Squidjam.Game\Squidjam.Game.fsproj"/>
     </ItemGroup>
 
 </Project>
