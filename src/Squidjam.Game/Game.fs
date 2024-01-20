@@ -3,6 +3,7 @@
 open System
 
 type GameState =
+    | PlayerRegistration
     | PlayerTurn of int
     | Ended of Guid option
 
@@ -10,5 +11,6 @@ type GameState =
 type Player = { id: Guid }
 
 type Game =
-    { state: GameState
+    { id: Guid
+      state: GameState
       players: Player array }

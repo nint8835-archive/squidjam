@@ -10,8 +10,9 @@
 
     <ItemGroup>
         <Compile Include="GameUtils.fs"/>
-        <Compile Include="Actions\EndTurn.fs" />
-        <Compile Include="Program.fs" />
+        <Compile Include="Actions\EndTurn.fs"/>
+        <Compile Include="Actions\AddPlayer.fs"/>
+        <Compile Include="Program.fs"/>
     </ItemGroup>
 
     <ItemGroup>

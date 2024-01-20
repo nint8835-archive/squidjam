@@ -6,7 +6,8 @@ open NUnit.Framework
 open Squidjam.Game
 
 let exampleGame =
-    { state = PlayerTurn 0
+    { id = Guid.NewGuid()
+      state = PlayerTurn 0
       players =
         [| { id = Guid.NewGuid() }
            { id = Guid.NewGuid() } |] }
