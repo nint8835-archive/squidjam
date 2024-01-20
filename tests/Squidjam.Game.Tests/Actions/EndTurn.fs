@@ -8,43 +8,43 @@ open Squidjam.Game
 [<Test>]
 let ``First Player`` () =
     let initialGame =
-        { id = Guid.NewGuid()
-          state = PlayerTurn(0)
-          players =
-            [| { id = Guid.NewGuid(); ready = true }
-               { id = Guid.NewGuid(); ready = true } |] }
+        { Id = Guid.NewGuid()
+          State = PlayerTurn(0)
+          Players =
+            [| { Id = Guid.NewGuid(); Ready = true }
+               { Id = Guid.NewGuid(); Ready = true } |] }
 
-    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.players[0])
+    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0])
 
     match game with
-    | Ok g -> Assert.AreEqual(g, { initialGame with state = PlayerTurn(1) })
+    | Ok g -> Assert.AreEqual(g, { initialGame with State = PlayerTurn(1) })
     | Error e -> Assert.Fail(e)
 
 [<Test>]
 let ``Last Player`` () =
     let initialGame =
-        { id = Guid.NewGuid()
-          state = PlayerTurn(1)
-          players =
-            [| { id = Guid.NewGuid(); ready = true }
-               { id = Guid.NewGuid(); ready = true } |] }
+        { Id = Guid.NewGuid()
+          State = PlayerTurn(1)
+          Players =
+            [| { Id = Guid.NewGuid(); Ready = true }
+               { Id = Guid.NewGuid(); Ready = true } |] }
 
-    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.players[1])
+    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[1])
 
     match game with
-    | Ok g -> Assert.AreEqual(g, { initialGame with state = PlayerTurn(0) })
+    | Ok g -> Assert.AreEqual(g, { initialGame with State = PlayerTurn(0) })
     | Error e -> Assert.Fail(e)
 
 [<Test>]
 let ``Not Player's Turn`` () =
     let initialGame =
-        { id = Guid.NewGuid()
-          state = PlayerTurn(1)
-          players =
-            [| { id = Guid.NewGuid(); ready = true }
-               { id = Guid.NewGuid(); ready = true } |] }
+        { Id = Guid.NewGuid()
+          State = PlayerTurn(1)
+          Players =
+            [| { Id = Guid.NewGuid(); Ready = true }
+               { Id = Guid.NewGuid(); Ready = true } |] }
 
-    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.players[0])
+    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0])
 
     match game with
     | Ok g -> Assert.Fail("Should not be able to end turn when it is not your turn")
@@ -60,11 +60,11 @@ let ``Invalid State`` (state: GameState) =
     let stateName = state.GetType().Name
 
     let initialGame =
-        { id = Guid.NewGuid()
-          state = state
-          players = [| { id = Guid.NewGuid(); ready = true } |] }
+        { Id = Guid.NewGuid()
+          State = state
+          Players = [| { Id = Guid.NewGuid(); Ready = true } |] }
 
-    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.players[0])
+    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0])
 
     match game with
     | Ok g -> Assert.Fail($"Should not be able to end turn in %s{stateName} state")

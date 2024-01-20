@@ -8,50 +8,50 @@ open Squidjam.Game
 [<Test>]
 let ``Ready Player`` () =
     let initialGame =
-        { id = Guid.NewGuid()
-          state = PlayerRegistration
-          players =
-            [| { id = Guid.NewGuid(); ready = false }
-               { id = Guid.NewGuid(); ready = false } |] }
+        { Id = Guid.NewGuid()
+          State = PlayerRegistration
+          Players =
+            [| { Id = Guid.NewGuid(); Ready = false }
+               { Id = Guid.NewGuid(); Ready = false } |] }
 
-    let game = Actions.Apply initialGame (Actions.Ready initialGame.players[0])
+    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
 
     match game with
     | Ok g ->
-        Assert.AreEqual(g.players[0], { initialGame.players[0] with ready = true })
-        Assert.AreEqual(g.state, PlayerRegistration)
+        Assert.AreEqual(g.Players[0], { initialGame.Players[0] with Ready = true })
+        Assert.AreEqual(g.State, PlayerRegistration)
     | Error e -> Assert.Fail(e)
 
 [<Test>]
 let ``Single Player Readying Doesn't Start Game`` () =
     let initialGame =
-        { id = Guid.NewGuid()
-          state = PlayerRegistration
-          players = [| { id = Guid.NewGuid(); ready = false } |] }
+        { Id = Guid.NewGuid()
+          State = PlayerRegistration
+          Players = [| { Id = Guid.NewGuid(); Ready = false } |] }
 
-    let game = Actions.Apply initialGame (Actions.Ready initialGame.players[0])
+    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
 
     match game with
     | Ok g ->
-        Assert.AreEqual(g.players[0], { initialGame.players[0] with ready = true })
-        Assert.AreEqual(g.state, PlayerRegistration)
+        Assert.AreEqual(g.Players[0], { initialGame.Players[0] with Ready = true })
+        Assert.AreEqual(g.State, PlayerRegistration)
     | Error e -> Assert.Fail(e)
 
 [<Test>]
 let ``All Players Readying Starts Game`` () =
     let initialGame =
-        { id = Guid.NewGuid()
-          state = PlayerRegistration
-          players =
-            [| { id = Guid.NewGuid(); ready = false }
-               { id = Guid.NewGuid(); ready = true } |] }
+        { Id = Guid.NewGuid()
+          State = PlayerRegistration
+          Players =
+            [| { Id = Guid.NewGuid(); Ready = false }
+               { Id = Guid.NewGuid(); Ready = true } |] }
 
-    let game = Actions.Apply initialGame (Actions.Ready initialGame.players[0])
+    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
 
     match game with
     | Ok g ->
-        Assert.AreEqual(g.players[0], { initialGame.players[0] with ready = true })
-        Assert.AreEqual(g.state, PlayerTurn(0))
+        Assert.AreEqual(g.Players[0], { initialGame.Players[0] with Ready = true })
+        Assert.AreEqual(g.State, PlayerTurn(0))
     | Error e -> Assert.Fail(e)
 
 
@@ -65,11 +65,11 @@ let ``Invalid State`` (state: GameState) =
     let stateName = state.GetType().Name
 
     let initialGame =
-        { id = Guid.NewGuid()
-          state = state
-          players = [| { id = Guid.NewGuid(); ready = true } |] }
+        { Id = Guid.NewGuid()
+          State = state
+          Players = [| { Id = Guid.NewGuid(); Ready = true } |] }
 
-    let game = Actions.Apply initialGame (Actions.Ready initialGame.players[0])
+    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
 
     match game with
     | Ok g -> Assert.Fail($"Should not be able to ready player in %s{stateName} state")

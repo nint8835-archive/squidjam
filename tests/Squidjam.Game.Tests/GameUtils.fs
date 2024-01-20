@@ -6,31 +6,31 @@ open NUnit.Framework
 open Squidjam.Game
 
 let exampleGame =
-    { id = Guid.NewGuid()
-      state = PlayerTurn 0
-      players =
-        [| { id = Guid.NewGuid(); ready = true }
-           { id = Guid.NewGuid(); ready = true } |] }
+    { Id = Guid.NewGuid()
+      State = PlayerTurn 0
+      Players =
+        [| { Id = Guid.NewGuid(); Ready = true }
+           { Id = Guid.NewGuid(); Ready = true } |] }
 
 [<Test>]
 let GetPlayerById () =
-    let secondPlayer = exampleGame.players[1]
+    let secondPlayer = exampleGame.Players[1]
 
-    let player = GameUtils.GetPlayerById exampleGame secondPlayer.id
+    let player = GameUtils.GetPlayerById exampleGame secondPlayer.Id
     Assert.AreEqual(secondPlayer, player)
 
 [<Test>]
 let GetPlayerIndex () =
-    let secondPlayer = exampleGame.players[1]
+    let secondPlayer = exampleGame.Players[1]
 
-    let index = GameUtils.GetPlayerIndex exampleGame secondPlayer.id
+    let index = GameUtils.GetPlayerIndex exampleGame secondPlayer.Id
     Assert.AreEqual(1, index)
 
 [<Test>]
 let UpdatePlayer () =
-    let secondPlayer = exampleGame.players.[1]
+    let secondPlayer = exampleGame.Players.[1]
 
     let updatedGame =
-        GameUtils.UpdatePlayer exampleGame secondPlayer.id (fun p -> { p with ready = false })
+        GameUtils.UpdatePlayer exampleGame secondPlayer.Id (fun p -> { p with Ready = false })
 
-    Assert.AreEqual(updatedGame.players[1], { secondPlayer with ready = false })
+    Assert.AreEqual(updatedGame.Players[1], { secondPlayer with Ready = false })

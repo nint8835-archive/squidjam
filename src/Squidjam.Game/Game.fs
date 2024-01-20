@@ -8,9 +8,9 @@ type GameState =
     | Ended of Guid option
 
 
-type Player = { id: Guid; ready: bool }
+type Player = { Id: Guid; Ready: bool }
 
 type Game =
-    { id: Guid
-      state: GameState
-      players: Player array }
+    { Id: Guid
+      State: GameState
+      Players: Player array }

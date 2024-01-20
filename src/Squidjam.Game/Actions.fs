@@ -9,43 +9,43 @@ type Action =
     | Ready of Player
 
 let endTurn (game: Game) (player: Player) : Result<Game, string> =
-    match game.state with
+    match game.State with
     | PlayerTurn playerIndex ->
-        if GameUtils.GetPlayerIndex game player.id = playerIndex then
-            Ok { game with state = PlayerTurn((playerIndex + 1) % game.players.Length) }
+        if GameUtils.GetPlayerIndex game player.Id = playerIndex then
+            Ok { game with State = PlayerTurn((playerIndex + 1) % game.Players.Length) }
         else
             Error "You cannot end the turn when it is not your turn"
-    | _ -> Error $"Unable to end turn in game state %s{game.state.GetType().Name}"
+    | _ -> Error $"Unable to end turn in game state %s{game.State.GetType().Name}"
 
 let addPlayer (game: Game) (player: Player) : Result<Game, string> =
-    if game.state <> PlayerRegistration then
-        Error $"Unable to add player in game state %s{game.state.GetType().Name}"
+    if game.State <> PlayerRegistration then
+        Error $"Unable to add player in game state %s{game.State.GetType().Name}"
     else
         let playerSeed =
             MD5
                 .Create()
                 .ComputeHash(
-                    game.id.ToByteArray()
-                    |> Array.append (player.id.ToByteArray())
+                    game.Id.ToByteArray()
+                    |> Array.append (player.Id.ToByteArray())
                 )
             |> BitConverter.ToInt32
 
         let random = Random(playerSeed)
 
-        let newPlayerArray = Array.append game.players [| player |]
+        let newPlayerArray = Array.append game.Players [| player |]
 
         random.Shuffle newPlayerArray
 
-        Ok { game with players = newPlayerArray }
+        Ok { game with Players = newPlayerArray }
 
 let ready (game: Game) (player: Player) : Result<Game, string> =
-    if game.state <> PlayerRegistration then
-        Error $"Unable to ready player in game state %s{game.state.GetType().Name}"
+    if game.State <> PlayerRegistration then
+        Error $"Unable to ready player in game state %s{game.State.GetType().Name}"
     else
-        let updatedGame = GameUtils.UpdatePlayer game player.id (fun p -> { p with ready = true })
+        let updatedGame = GameUtils.UpdatePlayer game player.Id (fun p -> { p with Ready = true })
         
-        if updatedGame.players |> Array.forall (_.ready) && updatedGame.players.Length > 1 then
-            Ok { updatedGame with state = PlayerTurn 0 }
+        if updatedGame.Players |> Array.forall (_.Ready) && updatedGame.Players.Length > 1 then
+            Ok { updatedGame with State = PlayerTurn 0 }
         else
             Ok updatedGame
 
