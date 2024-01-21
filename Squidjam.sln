@@ -7,6 +7,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Squidjam.Game", "src\Squidj
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Squidjam.Game.Tests", "tests\Squidjam.Game.Tests\Squidjam.Game.Tests.fsproj", "{9C2EE1F5-5B22-4324-A3CD-E310E7B28107}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squidjam.App", "src\Squidjam.App\Squidjam.App.csproj", "{95834970-95A6-4DEB-BCF1-D3040CCC0C60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{9C2EE1F5-5B22-4324-A3CD-E310E7B28107}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C2EE1F5-5B22-4324-A3CD-E310E7B28107}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C2EE1F5-5B22-4324-A3CD-E310E7B28107}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95834970-95A6-4DEB-BCF1-D3040CCC0C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95834970-95A6-4DEB-BCF1-D3040CCC0C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95834970-95A6-4DEB-BCF1-D3040CCC0C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95834970-95A6-4DEB-BCF1-D3040CCC0C60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
