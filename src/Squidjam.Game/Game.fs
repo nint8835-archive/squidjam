@@ -8,8 +8,8 @@ type Class =
 
 type GameState =
     | PlayerRegistration
-    | PlayerTurn of int
-    | Ended of Guid option
+    | PlayerTurn of PlayerIndex: int
+    | Ended of Winner: Guid option
 
 
 type Player =

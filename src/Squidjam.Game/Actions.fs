@@ -4,10 +4,10 @@ open System
 open System.Security.Cryptography
 
 type Action =
-    | EndTurn of Player
-    | AddPlayer of Player
-    | Ready of Player
-    | SelectClass of Player * Class
+    | EndTurn of Player: Player
+    | AddPlayer of Player: Player
+    | Ready of Player: Player
+    | SelectClass of Player: Player * Class: Class
 
 let endTurn (game: Game) (player: Player) : Result<Game, string> =
     match game.State with
