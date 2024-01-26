@@ -1,6 +1,8 @@
 using System.Text.Json.Serialization;
+using FSharp.SystemTextJson.Swagger;
 using Microsoft.FSharp.Core;
 using Squidjam.Game;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var games = new Dictionary<Guid, Game>();
 Guid testGameGuid = Guid.NewGuid();
@@ -10,14 +12,11 @@ games.Add(testGameGuid,
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+JsonFSharpOptions? fsOptions = JsonFSharpOptions.Default().WithUnionTagName("type").WithUnionNamedFields().WithUnionInternalTag();
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.ConfigureHttpJsonOptions(options =>
-	options.SerializerOptions.Converters.Add(
-		new JsonFSharpConverter(
-			JsonFSharpOptions.Default().WithUnionTagName("type").WithUnionNamedFields().WithUnionInternalTag()
-		)
-	));
+builder.Services.AddSwaggerForSystemTextJson(fsOptions, FSharpOption<FSharpFunc<SwaggerGenOptions, Unit>>.None);
+builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonFSharpConverter(fsOptions)));
 
 WebApplication app = builder.Build();
 
