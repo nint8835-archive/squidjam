@@ -6,3 +6,5 @@ export const connection = new signalR.HubConnectionBuilder()
     .build();
 
 connection.start();
+
+connection.on('PlayerJoined', console.log);

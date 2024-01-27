@@ -5,13 +5,11 @@ import { connection } from './signalr';
 import { usePlayerStore } from './state/player';
 
 export default function Test() {
-    const { data: games, isLoading, error } = useListGames({});
+    const { data: games, isLoading, error } = useListGames({}, { refetchInterval: 5000 });
     const { player } = usePlayerStore();
 
     const { mutateAsync: performAction, data: actionData, error: actionError } = usePerformAction({});
     const { mutateAsync: createGame, data: createGameData, error: createGameError } = useCreateGame({});
-
-    console.log(connection);
 
     const queryClient = useQueryClient();
 

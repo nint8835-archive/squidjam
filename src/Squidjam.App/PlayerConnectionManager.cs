@@ -18,4 +18,8 @@ public class PlayerConnectionManager {
 	public Guid GetPlayerId(string connectionId) {
 		return _connectionPlayers[connectionId];
 	}
+
+	public HashSet<string> GetConnectionIds(Guid playerId) {
+		return _playerConnections[playerId];
+	}
 }

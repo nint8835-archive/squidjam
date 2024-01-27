@@ -1,16 +1,13 @@
 using System.Text.Json.Serialization;
 using FSharp.SystemTextJson.Swagger;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.FSharp.Core;
 using Squidjam.App;
 using Squidjam.Game;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var games = new Dictionary<Guid, Game>();
-Guid testGameGuid = Guid.NewGuid();
-
-games.Add(testGameGuid,
-	new Game(testGameGuid, GameState.PlayerRegistration, [new Player(Guid.NewGuid(), false, FSharpOption<Class>.Some(Class.Grack))]));
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +40,8 @@ app.MapPost("/api/games", () => {
 }).WithName("CreateGame");
 
 app.MapPost("/api/games/{gameId:guid}/action",
-	Results<Ok<Game>, NotFound<string>, BadRequest<string>> (Guid gameId, Actions.Action action) => {
+	Results<Ok<Game>, NotFound<string>, BadRequest<string>> (IHubContext<GameHub> hub, PlayerConnectionManager manager, Guid gameId,
+		Actions.Action action) => {
 		if (!games.TryGetValue(gameId, out Game? value)) {
 			return TypedResults.NotFound("Game not found");
 		}
@@ -57,6 +55,17 @@ app.MapPost("/api/games/{gameId:guid}/action",
 		}
 
 		games[gameId] = newGame.ResultValue;
+
+		if (action.IsAddPlayer) {
+			Actions.Action.AddPlayer addPlayer = (Actions.Action.AddPlayer)action;
+
+			var connectionIds = manager.GetConnectionIds(addPlayer.Player);
+
+			foreach (string connectionId in connectionIds) {
+				hub.Groups.AddToGroupAsync(connectionId, gameId.ToString());
+				hub.Clients.Groups(gameId.ToString()).SendAsync("PlayerJoined", addPlayer.Player);
+			}
+		}
 
 		return TypedResults.Ok(newGame.ResultValue);
 	}).WithName("PerformAction");
