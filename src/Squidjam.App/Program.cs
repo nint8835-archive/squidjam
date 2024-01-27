@@ -35,6 +35,12 @@ app.MapFallbackToFile("index.html");
 app.MapHub<GameHub>("/api/realtime");
 
 app.MapGet("/api/games", () => games).WithName("ListGames");
+app.MapPost("/api/games", () => {
+	Game newGame = new Game(Guid.NewGuid(), GameState.PlayerRegistration, []);
+	games.Add(newGame.Id, newGame);
+
+	return newGame;
+}).WithName("CreateGame");
 
 app.MapPost("/api/games/{gameId:guid}/action",
 	Results<Ok<Game>, NotFound<string>, BadRequest<string>> (Guid gameId, Actions.Action action) => {

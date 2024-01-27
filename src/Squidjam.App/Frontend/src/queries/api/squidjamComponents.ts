@@ -41,6 +41,28 @@ export const useListGames = <TData = ListGamesResponse>(
     });
 };
 
+export type CreateGameError = Fetcher.ErrorWrapper<undefined>;
+
+export type CreateGameVariables = SquidjamContext['fetcherOptions'];
+
+export const fetchCreateGame = (variables: CreateGameVariables, signal?: AbortSignal) =>
+    squidjamFetch<Schemas.Game, CreateGameError, undefined, {}, {}, {}>({
+        url: '/api/games',
+        method: 'post',
+        ...variables,
+        signal,
+    });
+
+export const useCreateGame = (
+    options?: Omit<reactQuery.UseMutationOptions<Schemas.Game, CreateGameError, CreateGameVariables>, 'mutationFn'>,
+) => {
+    const { fetcherOptions } = useSquidjamContext();
+    return reactQuery.useMutation<Schemas.Game, CreateGameError, CreateGameVariables>({
+        mutationFn: (variables: CreateGameVariables) => fetchCreateGame({ ...fetcherOptions, ...variables }),
+        ...options,
+    });
+};
+
 export type PerformActionPathParams = {
     /**
      * @format uuid
