@@ -10,6 +10,7 @@ export interface Store {
     currentGame?: Schema.Game;
     signalRConnection?: signalR.HubConnection;
     signalRState: signalR.HubConnectionState;
+    signalRConnectionError?: string;
     setupSignalR: () => void;
 }
 
@@ -20,7 +21,7 @@ export const useStore = create<Store>()(
                 player: uuid4(),
                 signalRState: signalR.HubConnectionState.Disconnected,
                 setupSignalR: async () => {
-                    if (get().signalRConnection) {
+                    if (get().signalRConnection !== undefined) {
                         throw new Error('SignalR connection already set up');
                     }
 
@@ -46,8 +47,18 @@ export const useStore = create<Store>()(
                     connection.onreconnecting(updateSignalRConnectionState);
                     connection.onclose(updateSignalRConnectionState);
 
-                    await connection.start();
-                    updateSignalRConnectionState();
+                    try {
+                        await connection.start();
+                        updateSignalRConnectionState();
+                    } catch (e) {
+                        const errorMessage = e instanceof Error ? e.message : JSON.stringify(e);
+                        set(
+                            { signalRConnectionError: errorMessage, signalRState: connection.state },
+                            undefined,
+                            'signalRConnectionError',
+                        );
+                        updateSignalRConnectionState();
+                    }
                 },
             }),
             {
