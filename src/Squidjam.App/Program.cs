@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using FSharp.SystemTextJson.Swagger;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.FSharp.Core;
+using Squidjam.App;
 using Squidjam.Game;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -18,6 +19,8 @@ JsonFSharpOptions? fsOptions = JsonFSharpOptions.Default().WithUnionTagName("typ
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerForSystemTextJson(fsOptions, FSharpOption<FSharpFunc<SwaggerGenOptions, Unit>>.None);
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonFSharpConverter(fsOptions)));
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<PlayerConnectionManager>();
 
 WebApplication app = builder.Build();
 
@@ -28,6 +31,8 @@ if (app.Environment.IsDevelopment()) {
 
 app.UseStaticFiles();
 app.MapFallbackToFile("index.html");
+
+app.MapHub<GameHub>("/api/realtime");
 
 app.MapGet("/api/games", () => games).WithName("ListGames");
 
