@@ -1,23 +1,9 @@
-import { useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { useListGames } from './queries/api/squidjamComponents';
 import { usePlayerStore } from './state/player';
 
 export default function Test() {
     const { data: games, isLoading, error } = useListGames({});
-    const { player, setPlayer } = usePlayerStore();
-
-    useEffect(() => {
-        if (player !== undefined) {
-            return;
-        }
-
-        setPlayer({
-            id: uuidv4(),
-            ready: false,
-            class: null,
-        });
-    }, [player, setPlayer]);
+    const { player } = usePlayerStore();
 
     if (isLoading) {
         return <div>Loading...</div>;
