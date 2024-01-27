@@ -21,6 +21,8 @@ let endTurn (game: Game) (player: Guid) : Result<Game, string> =
 let addPlayer (game: Game) (playerGuid: Guid) : Result<Game, string> =
     if game.State <> PlayerRegistration then
         Error $"Unable to add player in game state %s{game.State.GetType().Name}"
+    else if game.Players |> Array.exists (fun p -> p.Id = playerGuid) then
+        Error "You are already in this game"
     else
         let playerSeed =
             MD5

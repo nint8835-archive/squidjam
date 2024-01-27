@@ -84,3 +84,19 @@ let ``Multiple Players Are Shuffled`` () =
             match gameWith3Players with
             | Error e -> Assert.Fail(e)
             | Ok g3 -> Assert.AreEqual(g3.Players, [| player1; player3; player2 |])
+
+[<Test>]
+let ``Unable To Add Player Already In Game`` () =
+    let initialGame =
+        { Id = Guid.NewGuid()
+          State = PlayerRegistration
+          Players =
+            [| { Id = Guid.NewGuid()
+                 Ready = false
+                 Class = None } |] }
+
+    let game = Actions.Apply initialGame (Actions.AddPlayer initialGame.Players[0].Id)
+
+    match game with
+    | Ok g -> Assert.Fail("Should not be able to add player already in game")
+    | Error e -> Assert.AreEqual(e, "You are already in this game")
