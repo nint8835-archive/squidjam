@@ -16,7 +16,7 @@ JsonFSharpOptions? fsOptions = JsonFSharpOptions.Default().WithUnionTagName("typ
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerForSystemTextJson(fsOptions, FSharpOption<FSharpFunc<SwaggerGenOptions, Unit>>.None);
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonFSharpConverter(fsOptions)));
-builder.Services.AddSignalR();
+builder.Services.AddSignalR().AddJsonProtocol(options => options.PayloadSerializerOptions.Converters.Add(new JsonFSharpConverter(fsOptions)));
 builder.Services.AddSingleton<PlayerConnectionManager>();
 
 WebApplication app = builder.Build();
@@ -63,9 +63,10 @@ app.MapPost("/api/games/{gameId:guid}/action",
 
 			foreach (string connectionId in connectionIds) {
 				hub.Groups.AddToGroupAsync(connectionId, gameId.ToString());
-				hub.Clients.Groups(gameId.ToString()).SendAsync("PlayerJoined", addPlayer.Player);
 			}
 		}
+
+		hub.Clients.Groups(gameId.ToString()).SendAsync("GameUpdated", newGame.ResultValue);
 
 		return TypedResults.Ok(newGame.ResultValue);
 	}).WithName("PerformAction");

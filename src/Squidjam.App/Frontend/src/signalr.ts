@@ -7,4 +7,4 @@ export const connection = new signalR.HubConnectionBuilder()
 
 connection.start();
 
-connection.on('PlayerJoined', console.log);
+connection.on('GameUpdated', console.log);
