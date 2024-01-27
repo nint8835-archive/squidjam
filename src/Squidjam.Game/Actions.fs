@@ -4,21 +4,21 @@ open System
 open System.Security.Cryptography
 
 type Action =
-    | EndTurn of Player: Player
-    | AddPlayer of Player: Player
-    | Ready of Player: Player
-    | SelectClass of Player: Player * Class: Class
+    | EndTurn of Player: Guid
+    | AddPlayer of Player: Guid
+    | Ready of Player: Guid
+    | SelectClass of Player: Guid * Class: Class
 
-let endTurn (game: Game) (player: Player) : Result<Game, string> =
+let endTurn (game: Game) (player: Guid) : Result<Game, string> =
     match game.State with
     | PlayerTurn playerIndex ->
-        if GameUtils.GetPlayerIndex game player.Id = playerIndex then
+        if GameUtils.GetPlayerIndex game player = playerIndex then
             Ok { game with State = PlayerTurn((playerIndex + 1) % game.Players.Length) }
         else
             Error "You cannot end the turn when it is not your turn"
     | _ -> Error $"Unable to end turn in game state %s{game.State.GetType().Name}"
 
-let addPlayer (game: Game) (player: Player) : Result<Game, string> =
+let addPlayer (game: Game) (playerGuid: Guid) : Result<Game, string> =
     if game.State <> PlayerRegistration then
         Error $"Unable to add player in game state %s{game.State.GetType().Name}"
     else
@@ -27,11 +27,17 @@ let addPlayer (game: Game) (player: Player) : Result<Game, string> =
                 .Create()
                 .ComputeHash(
                     game.Id.ToByteArray()
-                    |> Array.append (player.Id.ToByteArray())
+                    |> Array.append (playerGuid.ToByteArray())
                 )
             |> BitConverter.ToInt32
 
         let random = Random(playerSeed)
+        
+        let player = {
+            Id = playerGuid
+            Ready = false
+            Class = None 
+        }
 
         let newPlayerArray = Array.append game.Players [| player |]
 
@@ -39,7 +45,9 @@ let addPlayer (game: Game) (player: Player) : Result<Game, string> =
 
         Ok { game with Players = newPlayerArray }
 
-let ready (game: Game) (player: Player) : Result<Game, string> =
+let ready (game: Game) (playerGuid: Guid) : Result<Game, string> =
+    let player = GameUtils.GetPlayerById game playerGuid
+    
     if game.State <> PlayerRegistration then
         Error $"Unable to ready player in game state %s{game.State.GetType().Name}"
     else if player.Class.IsNone then
@@ -52,11 +60,11 @@ let ready (game: Game) (player: Player) : Result<Game, string> =
         else
             Ok updatedGame
 
-let selectClass (game: Game) (player: Player) (newClass: Class) : Result<Game, String> =
+let selectClass (game: Game) (player: Guid) (newClass: Class) : Result<Game, String> =
     if game.State <> PlayerRegistration then
         Error $"Unable to select class in game state %s{game.State.GetType().Name}"
     else
-        let updatedGame = GameUtils.UpdatePlayer game player.Id (fun p -> { p with Class = Some newClass })
+        let updatedGame = GameUtils.UpdatePlayer game player (fun p -> { p with Class = Some newClass })
 
         Ok updatedGame
 

@@ -18,7 +18,7 @@ let ``First Player`` () =
                  Ready = true
                  Class = Some Grack } |] }
 
-    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0])
+    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0].Id)
 
     match game with
     | Ok g -> Assert.AreEqual(g, { initialGame with State = PlayerTurn(1) })
@@ -37,7 +37,7 @@ let ``Last Player`` () =
                  Ready = true
                  Class = Some Grack } |] }
 
-    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[1])
+    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[1].Id)
 
     match game with
     | Ok g -> Assert.AreEqual(g, { initialGame with State = PlayerTurn(0) })
@@ -56,7 +56,7 @@ let ``Not Player's Turn`` () =
                  Ready = true
                  Class = Some Grack } |] }
 
-    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0])
+    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0].Id)
 
     match game with
     | Ok g -> Assert.Fail("Should not be able to end turn when it is not your turn")
@@ -79,7 +79,7 @@ let ``Invalid State`` (state: GameState) =
                  Ready = true
                  Class = Some Grack } |] }
 
-    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0])
+    let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0].Id)
 
     match game with
     | Ok g -> Assert.Fail($"Should not be able to end turn in %s{stateName} state")

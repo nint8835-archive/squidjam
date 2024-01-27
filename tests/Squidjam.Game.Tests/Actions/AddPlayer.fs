@@ -19,13 +19,7 @@ let ``Invalid State`` (state: GameState) =
           State = state
           Players = [||] }
 
-    let game =
-        Actions.Apply
-            initialGame
-            (Actions.AddPlayer
-                { Id = Guid.NewGuid()
-                  Ready = false
-                  Class = None })
+    let game = Actions.Apply initialGame (Actions.AddPlayer(Guid.NewGuid()))
 
     match game with
     | Ok g -> Assert.Fail($"Should not be able to add player in %s{stateName} state")
@@ -43,7 +37,7 @@ let ``Single Player`` () =
           Ready = false
           Class = None }
 
-    let game = Actions.Apply initialGame (Actions.AddPlayer newPlayer)
+    let game = Actions.Apply initialGame (Actions.AddPlayer newPlayer.Id)
 
     match game with
     | Ok g -> Assert.AreEqual(g, { initialGame with Players = [| newPlayer |] })
@@ -71,21 +65,21 @@ let ``Multiple Players Are Shuffled`` () =
           Ready = false
           Class = None }
 
-    let gameWith1Player = Actions.Apply initialGame (Actions.AddPlayer player1)
+    let gameWith1Player = Actions.Apply initialGame (Actions.AddPlayer player1.Id)
 
     match gameWith1Player with
     | Error e -> Assert.Fail(e)
     | Ok g1 ->
         Assert.AreEqual(g1.Players, [| player1 |])
 
-        let gameWith2Players = Actions.Apply g1 (Actions.AddPlayer player2)
+        let gameWith2Players = Actions.Apply g1 (Actions.AddPlayer player2.Id)
 
         match gameWith2Players with
         | Error e -> Assert.Fail(e)
         | Ok g2 ->
             Assert.AreEqual(g2.Players, [| player2; player1 |])
 
-            let gameWith3Players = Actions.Apply g2 (Actions.AddPlayer player3)
+            let gameWith3Players = Actions.Apply g2 (Actions.AddPlayer player3.Id)
 
             match gameWith3Players with
             | Error e -> Assert.Fail(e)

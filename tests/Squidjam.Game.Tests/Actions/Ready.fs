@@ -18,7 +18,7 @@ let ``Ready Player`` () =
                  Ready = false
                  Class = Some Grack } |] }
 
-    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
+    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
     match game with
     | Ok g ->
@@ -36,7 +36,7 @@ let ``Single Player Readying Doesn't Start Game`` () =
                  Ready = false
                  Class = Some Grack } |] }
 
-    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
+    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
     match game with
     | Ok g ->
@@ -57,7 +57,7 @@ let ``All Players Readying Starts Game`` () =
                  Ready = true
                  Class = Some Grack } |] }
 
-    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
+    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
     match game with
     | Ok g ->
@@ -75,7 +75,7 @@ let ``Cannot Ready Without Class Selected`` () =
                  Ready = true
                  Class = None } |] }
 
-    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
+    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
     match game with
     | Ok g -> Assert.Fail("Should not be able to ready player without class selected")
@@ -99,7 +99,7 @@ let ``Invalid State`` (state: GameState) =
                  Ready = true
                  Class = Some Grack } |] }
 
-    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0])
+    let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
     match game with
     | Ok g -> Assert.Fail($"Should not be able to ready player in %s{stateName} state")
