@@ -28,6 +28,6 @@ if (app.Environment.IsDevelopment()) {
 app.UseStaticFiles();
 app.MapFallbackToFile("index.html");
 
-app.MapGet("/api/games", () => games);
+app.MapGet("/api/games", () => games).WithName("ListGames");
 
 app.Run();
