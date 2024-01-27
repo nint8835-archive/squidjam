@@ -3,6 +3,26 @@
  *
  * @version 1.0
  */
+export type AddPlayer = {
+    type: AddPlayerEnum;
+    /**
+     * @format uuid
+     */
+    player: string;
+};
+
+export type AddPlayerEnum = 'AddPlayer';
+
+export type EndTurn = {
+    type: EndTurnEnum;
+    /**
+     * @format uuid
+     */
+    player: string;
+};
+
+export type EndTurnEnum = 'EndTurn';
+
 export type Ended = {
     type: EndedEnum;
     /**
@@ -58,3 +78,24 @@ export type PlayerTurn = {
 };
 
 export type PlayerTurnEnum = 'PlayerTurn';
+
+export type Ready = {
+    type: ReadyEnum;
+    /**
+     * @format uuid
+     */
+    player: string;
+};
+
+export type ReadyEnum = 'Ready';
+
+export type SelectClass = {
+    type: SelectClassEnum;
+    /**
+     * @format uuid
+     */
+    player: string;
+    ['class']: Grack | Gump;
+};
+
+export type SelectClassEnum = 'SelectClass';

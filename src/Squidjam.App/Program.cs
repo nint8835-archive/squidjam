@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using FSharp.SystemTextJson.Swagger;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.FSharp.Core;
 using Squidjam.Game;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -8,7 +9,7 @@ var games = new Dictionary<Guid, Game>();
 Guid testGameGuid = Guid.NewGuid();
 
 games.Add(testGameGuid,
-	new Game(testGameGuid, GameState.NewPlayerTurn(0), [new Player(Guid.NewGuid(), false, FSharpOption<Class>.Some(Class.Grack))]));
+	new Game(testGameGuid, GameState.PlayerRegistration, [new Player(Guid.NewGuid(), false, FSharpOption<Class>.Some(Class.Grack))]));
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -29,5 +30,24 @@ app.UseStaticFiles();
 app.MapFallbackToFile("index.html");
 
 app.MapGet("/api/games", () => games).WithName("ListGames");
+
+app.MapPost("/api/games/{gameId:guid}/action",
+	Results<Ok<Game>, NotFound<string>, BadRequest<string>> (Guid gameId, Actions.Action action) => {
+		if (!games.TryGetValue(gameId, out Game? value)) {
+			return TypedResults.NotFound("Game not found");
+		}
+
+		Console.WriteLine($"Performing action {action} on game {gameId}");
+
+		var newGame = Actions.Apply(value, action);
+
+		if (newGame.IsError) {
+			return TypedResults.BadRequest(newGame.ErrorValue);
+		}
+
+		games[gameId] = newGame.ResultValue;
+
+		return TypedResults.Ok(newGame.ResultValue);
+	}).WithName("PerformAction");
 
 app.Run();

@@ -1,9 +1,15 @@
-import { useListGames } from './queries/api/squidjamComponents';
+import { useQueryClient } from '@tanstack/react-query';
+import { useListGames, usePerformAction } from './queries/api/squidjamComponents';
+import { queryKeyFn } from './queries/api/squidjamContext';
 import { usePlayerStore } from './state/player';
 
 export default function Test() {
     const { data: games, isLoading, error } = useListGames({});
     const { player } = usePlayerStore();
+
+    const { mutateAsync: performAction, data: actionData, error: actionError } = usePerformAction({});
+
+    const queryClient = useQueryClient();
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -23,6 +29,26 @@ export default function Test() {
                 <pre key={key}>{JSON.stringify(value, undefined, 2)}</pre>
             ))}
             <pre>{JSON.stringify(player, undefined, 2)}</pre>
+            <button
+                onClick={async () => {
+                    await performAction({
+                        body: {
+                            player,
+                            type: 'AddPlayer',
+                        },
+                        pathParams: {
+                            gameId: Object.keys(games)[0],
+                        },
+                    });
+                    await queryClient.invalidateQueries({
+                        queryKey: queryKeyFn({ operationId: 'listGames', path: '/api/games', variables: {} }),
+                    });
+                }}
+            >
+                DO THE THING
+            </button>
+            <pre>{JSON.stringify(actionData, undefined, 2)}</pre>
+            <pre>{JSON.stringify(actionError, undefined, 2)}</pre>
         </div>
     );
 }

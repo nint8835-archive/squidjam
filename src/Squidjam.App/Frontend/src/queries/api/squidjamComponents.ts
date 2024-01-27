@@ -41,6 +41,52 @@ export const useListGames = <TData = ListGamesResponse>(
     });
 };
 
+export type PerformActionPathParams = {
+    /**
+     * @format uuid
+     */
+    gameId: string;
+};
+
+export type PerformActionError = Fetcher.ErrorWrapper<
+    | {
+          status: 400;
+          payload: string;
+      }
+    | {
+          status: 404;
+          payload: string;
+      }
+>;
+
+export type PerformActionVariables = {
+    body?: Schemas.EndTurn | Schemas.AddPlayer | Schemas.Ready | Schemas.SelectClass;
+    pathParams: PerformActionPathParams;
+} & SquidjamContext['fetcherOptions'];
+
+export const fetchPerformAction = (variables: PerformActionVariables, signal?: AbortSignal) =>
+    squidjamFetch<
+        Schemas.Game,
+        PerformActionError,
+        Schemas.EndTurn | Schemas.AddPlayer | Schemas.Ready | Schemas.SelectClass,
+        {},
+        {},
+        PerformActionPathParams
+    >({ url: '/api/games/{gameId}/action', method: 'post', ...variables, signal });
+
+export const usePerformAction = (
+    options?: Omit<
+        reactQuery.UseMutationOptions<Schemas.Game, PerformActionError, PerformActionVariables>,
+        'mutationFn'
+    >,
+) => {
+    const { fetcherOptions } = useSquidjamContext();
+    return reactQuery.useMutation<Schemas.Game, PerformActionError, PerformActionVariables>({
+        mutationFn: (variables: PerformActionVariables) => fetchPerformAction({ ...fetcherOptions, ...variables }),
+        ...options,
+    });
+};
+
 export type QueryOperation = {
     path: '/api/games';
     operationId: 'listGames';
