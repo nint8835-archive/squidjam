@@ -1,7 +1,9 @@
 import { useListGames } from './queries/api/squidjamComponents';
+import { usePlayerStore } from './state/player';
 
 export default function Test() {
     const { data: games, isLoading, error } = useListGames({});
+    const store = usePlayerStore();
 
     if (isLoading) {
         return <div>Loading...</div>;
