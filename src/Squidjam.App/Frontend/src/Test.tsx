@@ -1,12 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useCreateGame, useListGames, usePerformAction } from './queries/api/squidjamComponents';
 import { queryKeyFn } from './queries/api/squidjamContext';
-import { connection } from './signalr';
-import { usePlayerStore } from './state/player';
+import { useStore } from './store';
 
 export default function Test() {
     const { data: games, isLoading, error } = useListGames({}, { refetchInterval: 5000 });
-    const { player } = usePlayerStore();
+    const { player } = useStore();
 
     const { mutateAsync: performAction, data: actionData, error: actionError } = usePerformAction({});
     const { mutateAsync: createGame, data: createGameData, error: createGameError } = useCreateGame({});
@@ -51,13 +50,6 @@ export default function Test() {
             </button>
             <pre>{JSON.stringify(actionData, undefined, 2)}</pre>
             <pre>{JSON.stringify(actionError, undefined, 2)}</pre>
-            <button
-                onClick={() => {
-                    connection.send('example');
-                }}
-            >
-                DO THE OTHER THING
-            </button>
             <button
                 onClick={async () => {
                     await createGame({});
