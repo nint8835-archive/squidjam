@@ -17,19 +17,12 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
     const { mutateAsync: performAction } = usePerformAction({ onError: (err) => toast.error(err.stack) });
 
     const isCurrentPlayer = player.id === currentPlayer;
+    const isPlayersTurn = gameState.type === 'PlayerTurn' && gameState.playerIndex === players.indexOf(player);
 
     const playerColour = playerColours[playerIndex % 3];
 
     return (
-        <div
-            className={cn(
-                'bg-opacity-50 p-2',
-                playerColour,
-                gameState.type === 'PlayerTurn' &&
-                    gameState.playerIndex === players.indexOf(player) &&
-                    'border-l-2 border-l-white',
-            )}
-        >
+        <div className={cn('bg-opacity-50 p-2', playerColour, isPlayersTurn && 'border-l-2 border-l-white')}>
             <div className="flex flex-row justify-between">
                 <div className="text-xl">
                     {player.name}{' '}
@@ -39,6 +32,8 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
                         {')'}
                     </span>
                 </div>
+
+                {/* Ready status */}
                 {gameState.type === 'PlayerRegistration' && (
                     <div
                         className={cn(
@@ -57,8 +52,27 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
                         )}
                     </div>
                 )}
+
+                {/* End turn button */}
+                {isPlayersTurn && isCurrentPlayer && (
+                    <button
+                        className="rounded-sm bg-blue-600 px-2 transition-all hover:bg-blue-700"
+                        onClick={async () => {
+                            await performAction({
+                                pathParams: { gameId },
+                                body: {
+                                    type: 'EndTurn',
+                                    player: player.id,
+                                },
+                            });
+                        }}
+                    >
+                        End Turn
+                    </button>
+                )}
             </div>
 
+            {/* Class selection / ready-up UI */}
             {gameState.type === 'PlayerRegistration' && isCurrentPlayer && (
                 <div className="flex flex-col items-center justify-center gap-4">
                     <h1 className="text-xl">Select a class</h1>

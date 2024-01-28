@@ -46,7 +46,7 @@ export default function App() {
             <Toaster position="top-right" theme="dark" richColors />
             <SignalRConnectionOverlay />
             <RouterProvider router={router} />
-            <ReactQueryDevtools initialIsOpen={false} />
+            <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" />
         </QueryClientProvider>
     );
 }
