@@ -1,7 +1,23 @@
+import Player from '../components/Player';
 import { useStore } from '../store';
 
 export default function GamePage() {
-    const { currentGame } = useStore();
+    const { currentGame, player: currentPlayer } = useStore();
 
-    return <pre>{JSON.stringify(currentGame, undefined, 2)}</pre>;
+    return (
+        <div className="flex h-full flex-col">
+            <div className="flex-1">
+                {currentGame?.players.map((player, playerIndex) =>
+                    player.id === currentPlayer ? null : (
+                        <Player player={player} playerIndex={playerIndex} key={player.id} />
+                    ),
+                )}
+            </div>
+
+            <Player
+                player={currentGame!.players.find((player) => player.id === currentPlayer)!}
+                playerIndex={currentGame!.players.findIndex((player) => player.id === currentPlayer)!}
+            />
+        </div>
+    );
 }

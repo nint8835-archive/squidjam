@@ -7,7 +7,7 @@ import * as Schema from './queries/api/squidjamSchemas';
 export interface Store {
     player: string;
 
-    currentGame?: Schema.Game;
+    currentGame: Schema.Game;
     signalRConnection?: signalR.HubConnection;
     signalRState: signalR.HubConnectionState;
     signalRConnectionError?: string;
@@ -20,6 +20,7 @@ export const useStore = create<Store>()(
             (set, get) => ({
                 player: uuid4(),
                 signalRState: signalR.HubConnectionState.Disconnected,
+                currentGame: { id: '', players: [], state: { type: 'PlayerRegistration' } },
                 setupSignalR: async () => {
                     if (get().signalRConnection !== undefined) {
                         throw new Error('SignalR connection already set up');
