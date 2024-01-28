@@ -10,10 +10,10 @@ const stateClasses: Record<Schema.Game['state']['type'], string> = {
     Ended: 'bg-red-800',
 };
 
-function StateBadge({ state }: { state: Schema.Game['state'] }) {
+function StateBadge({ game }: { game: Schema.Game }) {
     return (
-        <div className={cn('w-fit rounded-sm p-1 text-sm', stateClasses[state.type])}>
-            {stateFormatters[state.type](state)}
+        <div className={cn('w-fit rounded-sm p-1 text-sm', stateClasses[game.state.type])}>
+            {stateFormatters[game.state.type](game)}
         </div>
     );
 }
@@ -52,7 +52,7 @@ export default function GameListPage() {
                         >
                             <h2 className="text-xl">{key}</h2>
                             <div className="flex flex-row items-center justify-between">
-                                <StateBadge state={value.state} />
+                                <StateBadge game={value} />
                                 <div className="flex">
                                     <UserIcon className="h-6 w-6" />
                                     {value.players.length}
