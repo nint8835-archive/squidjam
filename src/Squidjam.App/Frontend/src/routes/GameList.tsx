@@ -2,6 +2,7 @@ import { UserIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { useCreateGame, useListGames } from '../queries/api/squidjamComponents';
 import * as Schema from '../queries/api/squidjamSchemas';
+import { useStore } from '../store';
 import { cn, stateFormatters } from '../util';
 
 const stateClasses: Record<Schema.Game['state']['type'], string> = {
@@ -19,6 +20,8 @@ function StateBadge({ game }: { game: Schema.Game }) {
 }
 
 export default function GameListPage() {
+    const { playerName, setPlayerName } = useStore();
+
     const { data: games, isLoading, isError, refetch } = useListGames({}, { refetchInterval: 5000 });
     const { mutateAsync: createGame } = useCreateGame({});
     const navigate = useNavigate();
@@ -27,15 +30,23 @@ export default function GameListPage() {
         <div className="space-y-4 p-4">
             <div className="flex flex-row justify-between">
                 <h1 className="text-2xl">Games</h1>
-                <button
-                    className="rounded-md bg-emerald-600 px-4 py-2 text-white transition-all hover:bg-emerald-700"
-                    onClick={async () => {
-                        await createGame({});
-                        refetch();
-                    }}
-                >
-                    Create Game
-                </button>
+                <div className="space-x-2">
+                    <input
+                        className="h-full rounded-md bg-zinc-900 p-2 text-right italic text-zinc-500 outline-none ring-zinc-500 transition-all focus:text-white focus:ring-2"
+                        value={playerName}
+                        size={playerName.length}
+                        onChange={(e) => setPlayerName(e.target.value)}
+                    ></input>
+                    <button
+                        className="rounded-md bg-emerald-600 px-4 py-2 text-white transition-all hover:bg-emerald-700"
+                        onClick={async () => {
+                            await createGame({});
+                            refetch();
+                        }}
+                    >
+                        Create Game
+                    </button>
+                </div>
             </div>
 
             {isLoading && <div>Loading...</div>}

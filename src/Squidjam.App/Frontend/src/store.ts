@@ -6,7 +6,9 @@ import * as Schema from './queries/api/squidjamSchemas';
 
 export interface Store {
     playerId: string;
+
     playerName: string;
+    setPlayerName: (name: string) => void;
 
     currentGame: Schema.Game;
     signalRConnection?: signalR.HubConnection;
@@ -20,7 +22,10 @@ export const useStore = create<Store>()(
         persist(
             (set, get) => ({
                 playerId: uuid4(),
+
                 playerName: `Unnamed Player ${Math.floor(Math.random() * 1000)}`,
+                setPlayerName: (name) => set({ playerName: name }, undefined, 'setPlayerName'),
+
                 signalRState: signalR.HubConnectionState.Disconnected,
                 currentGame: { id: '', players: [], state: { type: 'PlayerRegistration' } },
                 setupSignalR: async () => {
