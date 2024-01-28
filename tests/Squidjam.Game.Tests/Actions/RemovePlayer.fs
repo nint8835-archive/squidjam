@@ -138,3 +138,26 @@ let ``Remove Last Opponent`` () =
                 Players = [| initialGame.Players[0] |] }
         )
     | Error e -> Assert.Fail(e)
+
+[<Test>]
+let ``Remove Last Player`` () =
+    let initialGame =
+        { Id = Guid.NewGuid()
+          State = PlayerTurn(0)
+          Players =
+            [| { Id = Guid.NewGuid()
+                 Ready = false
+                 Class = None } |] }
+
+    let game =
+        Actions.Apply initialGame (Actions.RemovePlayer(initialGame.Players[0].Id))
+
+    match game with
+    | Ok g ->
+        Assert.AreEqual(
+            g,
+            { initialGame with
+                State = Ended(None)
+                Players = [|  |] }
+        )
+    | Error e -> Assert.Fail(e)

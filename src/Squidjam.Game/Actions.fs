@@ -55,6 +55,7 @@ let removePlayer (game: Game) (playerGuid: Guid) : Result<Game, string> =
         Ok { game with
                 Players = newPlayerArray;
                 State = match game.State with
+                        | PlayerTurn _ when newPlayerArray.Length = 0 -> Ended(None)
                         | PlayerTurn playerIndex -> PlayerTurn(playerIndex % newPlayerArray.Length)
                         | _ -> game.State
              }
