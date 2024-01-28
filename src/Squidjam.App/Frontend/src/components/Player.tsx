@@ -8,7 +8,7 @@ const playerColours = ['bg-red-900', 'bg-purple-900', 'bg-blue-900'];
 
 export default function Player({ player, playerIndex }: { player: Schema.Player; playerIndex: number }) {
     const {
-        currentGame: { id: gameId },
+        currentGame: { id: gameId, state: gameState, players },
         playerId: currentPlayer,
     } = useStore();
     const { mutateAsync: performAction } = usePerformAction({ onError: (err) => toast.error(err.stack) });
@@ -27,7 +27,15 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
         ];
 
     return (
-        <div className={cn('p-2', playerColour)}>
+        <div
+            className={cn(
+                'p-2',
+                playerColour,
+                gameState.type === 'PlayerTurn' &&
+                    gameState.playerIndex === players.indexOf(player) &&
+                    'border-l-2 border-l-white',
+            )}
+        >
             <pre>{JSON.stringify(player, undefined, 2)}</pre>
             {isCurrentPlayer && (
                 <div className="flex justify-between gap-4 px-16 pt-2">
