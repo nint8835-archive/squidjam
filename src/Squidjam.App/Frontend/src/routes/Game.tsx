@@ -5,7 +5,7 @@ import { useStore } from '../store';
 import { stateFormatters } from '../util';
 
 export default function GamePage() {
-    const { currentGame, player: currentPlayer } = useStore();
+    const { currentGame, playerId: currentPlayer } = useStore();
     const { mutateAsync: performAction } = usePerformAction({ onError: (err) => toast.error(err.stack) });
 
     const navigate = useNavigate();
@@ -16,9 +16,7 @@ export default function GamePage() {
                 <div className="flex-1"></div>
                 <div className="flex flex-col items-center">
                     <h1 className="text-2xl">{currentGame.id}</h1>
-                    <div className="italic text-zinc-500">
-                        {stateFormatters[currentGame.state.type](currentGame.state)}
-                    </div>
+                    <div className="italic text-zinc-500">{stateFormatters[currentGame.state.type](currentGame)}</div>
                 </div>
                 <div className="flex-1 text-right">
                     <button

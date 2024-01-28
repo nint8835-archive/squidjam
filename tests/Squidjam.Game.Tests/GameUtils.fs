@@ -10,9 +10,11 @@ let exampleGame =
       State = PlayerTurn 0
       Players =
         [| { Id = Guid.NewGuid()
+             Name = Guid.NewGuid().ToString()
              Ready = true
              Class = Some Grack }
            { Id = Guid.NewGuid()
+             Name = Guid.NewGuid().ToString()
              Ready = true
              Class = Some Grack } |] }
 

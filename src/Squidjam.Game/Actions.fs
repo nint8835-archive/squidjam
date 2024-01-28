@@ -5,7 +5,7 @@ open System.Security.Cryptography
 
 type Action =
     | EndTurn of Player: Guid
-    | AddPlayer of Player: Guid
+    | AddPlayer of Player: Guid * Name: string
     | RemovePlayer of Player: Guid
     | Ready of Player: Guid
     | SelectClass of Player: Guid * Class: Class
@@ -19,7 +19,7 @@ let endTurn (game: Game) (player: Guid) : Result<Game, string> =
             Error "You cannot end the turn when it is not your turn"
     | _ -> Error $"Unable to end turn in game state %s{game.State.GetType().Name}"
 
-let addPlayer (game: Game) (playerGuid: Guid) : Result<Game, string> =
+let addPlayer (game: Game) (playerGuid: Guid) (playerName: string) : Result<Game, string> =
     if game.State <> PlayerRegistration then
         Error $"Unable to add player in game state %s{game.State.GetType().Name}"
     else if game.Players |> Array.exists (fun p -> p.Id = playerGuid) then
@@ -38,6 +38,7 @@ let addPlayer (game: Game) (playerGuid: Guid) : Result<Game, string> =
         
         let player = {
             Id = playerGuid
+            Name = playerName
             Ready = false
             Class = None 
         }
@@ -91,7 +92,7 @@ let selectClass (game: Game) (player: Guid) (newClass: Class) : Result<Game, Str
 let Apply (game: Game) (action: Action) : Result<Game, string> =
     match action with
     | EndTurn player -> endTurn game player
-    | AddPlayer player -> addPlayer game player
+    | AddPlayer (player, playerName) -> addPlayer game player playerName
     | RemovePlayer player -> removePlayer game player
     | Ready player -> ready game player
     | SelectClass (player, newClass) -> selectClass game player newClass

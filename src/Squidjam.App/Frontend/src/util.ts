@@ -6,16 +6,16 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export const stateFormatters: Record<Schema.Game['state']['type'], (state: Schema.Game['state']) => string> = {
+export const stateFormatters: Record<Schema.Game['state']['type'], (game: Schema.Game) => string> = {
     PlayerRegistration: () => 'Waiting for players...',
-    PlayerTurn: (state) => `Player ${(state as Schema.PlayerTurn).playerIndex + 1}'s turn`,
-    Ended: (state) => {
-        const { winner } = state as Schema.Ended;
+    PlayerTurn: (game) => `${game.players[(game.state as Schema.PlayerTurn).playerIndex].name}'s turn`,
+    Ended: (game) => {
+        const { winner } = game.state as Schema.Ended;
 
         if (winner === null) {
             return 'Ended - Tie';
         }
 
-        return `Ended - ${winner} won`;
+        return `Ended - ${game.players.find((player) => player.id === winner)?.name} won`;
     },
 };

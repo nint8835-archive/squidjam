@@ -12,6 +12,7 @@ let ``With No Current Class`` () =
           State = PlayerRegistration
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = None } |] }
 
@@ -29,6 +30,7 @@ let ``With Current Class`` () =
           State = PlayerRegistration
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack } |] }
 
@@ -53,6 +55,7 @@ let ``Invalid State`` (state: GameState) =
           State = state
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack } |] }
 

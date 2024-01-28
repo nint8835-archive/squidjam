@@ -5,7 +5,8 @@ import { devtools, persist } from 'zustand/middleware';
 import * as Schema from './queries/api/squidjamSchemas';
 
 export interface Store {
-    player: string;
+    playerId: string;
+    playerName: string;
 
     currentGame: Schema.Game;
     signalRConnection?: signalR.HubConnection;
@@ -18,7 +19,8 @@ export const useStore = create<Store>()(
     devtools(
         persist(
             (set, get) => ({
-                player: uuid4(),
+                playerId: uuid4(),
+                playerName: `Unnamed Player ${Math.floor(Math.random() * 1000)}`,
                 signalRState: signalR.HubConnectionState.Disconnected,
                 currentGame: { id: '', players: [], state: { type: 'PlayerRegistration' } },
                 setupSignalR: async () => {
@@ -27,7 +29,7 @@ export const useStore = create<Store>()(
                     }
 
                     const connection = new signalR.HubConnectionBuilder()
-                        .withUrl(`/api/realtime?playerId=${get().player}`)
+                        .withUrl(`/api/realtime?playerId=${get().playerId}`)
                         .withAutomaticReconnect()
                         .build();
                     set(
@@ -64,7 +66,7 @@ export const useStore = create<Store>()(
             }),
             {
                 name: 'squidjam-state',
-                partialize: (state) => ({ player: state.player }),
+                partialize: (state) => ({ playerId: state.playerId, playerName: state.playerName }),
             },
         ),
     ),

@@ -22,7 +22,11 @@ const router = createBrowserRouter([
             try {
                 const joinResp = await fetchPerformAction({
                     pathParams: { gameId: params.gameId! },
-                    body: { type: 'AddPlayer', player: useStore.getState().player },
+                    body: {
+                        type: 'AddPlayer',
+                        player: useStore.getState().playerId,
+                        name: useStore.getState().playerName,
+                    },
                 });
 
                 useStore.setState({ currentGame: joinResp });

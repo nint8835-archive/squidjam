@@ -14,6 +14,7 @@ type GameState =
 
 type Player =
     { Id: Guid
+      Name: string
       Ready: bool
       Class: Class option }
 

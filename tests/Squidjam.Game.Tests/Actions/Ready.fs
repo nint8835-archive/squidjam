@@ -12,9 +12,11 @@ let ``Ready Player`` () =
           State = PlayerRegistration
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = Some Grack }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = Some Grack } |] }
 
@@ -33,6 +35,7 @@ let ``Single Player Readying Doesn't Start Game`` () =
           State = PlayerRegistration
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = Some Grack } |] }
 
@@ -51,9 +54,11 @@ let ``All Players Readying Starts Game`` () =
           State = PlayerRegistration
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = Some Grack }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack } |] }
 
@@ -72,6 +77,7 @@ let ``Cannot Ready Without Class Selected`` () =
           State = PlayerRegistration
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = None } |] }
 
@@ -109,6 +115,7 @@ let ``Invalid State`` (state: GameState) =
           State = state
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack } |] }
 

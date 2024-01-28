@@ -9,7 +9,7 @@ const playerColours = ['bg-red-900', 'bg-purple-900', 'bg-blue-900'];
 export default function Player({ player, playerIndex }: { player: Schema.Player; playerIndex: number }) {
     const {
         currentGame: { id: gameId },
-        player: currentPlayer,
+        playerId: currentPlayer,
     } = useStore();
     const { mutateAsync: performAction } = usePerformAction({ onError: (err) => toast.error(err.stack) });
 

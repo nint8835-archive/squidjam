@@ -12,9 +12,11 @@ let ``First Player`` () =
           State = PlayerTurn(0)
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack } |] }
 
@@ -31,9 +33,11 @@ let ``Last Player`` () =
           State = PlayerTurn(1)
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack } |] }
 
@@ -50,9 +54,11 @@ let ``Not Player's Turn`` () =
           State = PlayerTurn(1)
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack } |] }
 
@@ -76,6 +82,7 @@ let ``Invalid State`` (state: GameState) =
           State = state
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack } |] }
 

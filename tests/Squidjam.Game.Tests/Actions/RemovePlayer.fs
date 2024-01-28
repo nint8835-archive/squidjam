@@ -11,6 +11,7 @@ let ``Player Not In Game`` () =
           State = PlayerRegistration
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None } |] }
 
@@ -28,12 +29,15 @@ let ``Remove Player Who's Turn It Is - Beginning of Turn Order`` () =
           State = PlayerTurn(0)
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None } |] }
 
@@ -58,12 +62,15 @@ let ``Remove Player Who's Turn It Is - Middle of Turn Order`` () =
           State = PlayerTurn(1)
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None } |] }
 
@@ -88,12 +95,15 @@ let ``Remove Player Who's Turn It Is - End of Turn Order`` () =
           State = PlayerTurn(2)
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None } |] }
 
@@ -119,9 +129,11 @@ let ``Remove Last Opponent`` () =
           State = PlayerTurn(0)
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None }
                { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None } |] }
 
@@ -146,6 +158,7 @@ let ``Remove Last Player`` () =
           State = PlayerTurn(0)
           Players =
             [| { Id = Guid.NewGuid()
+                 Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None } |] }
 
@@ -158,6 +171,6 @@ let ``Remove Last Player`` () =
             g,
             { initialGame with
                 State = Ended(None)
-                Players = [|  |] }
+                Players = [||] }
         )
     | Error e -> Assert.Fail(e)

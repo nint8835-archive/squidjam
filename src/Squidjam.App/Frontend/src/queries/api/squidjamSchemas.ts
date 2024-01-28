@@ -9,6 +9,7 @@ export type AddPlayer = {
      * @format uuid
      */
     player: string;
+    name: string;
 };
 
 export type AddPlayerEnum = 'AddPlayer';
@@ -59,6 +60,7 @@ export type Player = {
      * @format uuid
      */
     id: string;
+    name: string;
     ready: boolean;
     ['class']: Grack | Gump | null;
 };
