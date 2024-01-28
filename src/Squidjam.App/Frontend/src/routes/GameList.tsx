@@ -1,5 +1,6 @@
 import { UserIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { useCreateGame, useListGames } from '../queries/api/squidjamComponents';
 import * as Schema from '../queries/api/squidjamSchemas';
 import { useStore } from '../store';
@@ -52,12 +53,24 @@ export default function GameListPage() {
             {isLoading && <div>Loading...</div>}
             {isError && <div>Error</div>}
             {games && (
-                <div>
+                <div className="space-y-2">
                     {Object.entries(games).map(([key, value]) => (
                         <div
                             key={key}
-                            className="cursor-pointer rounded-md p-2 transition-all hover:bg-zinc-950"
+                            className={cn(
+                                'rounded-md p-2 transition-all ',
+                                value.state.type === 'PlayerRegistration'
+                                    ? 'cursor-pointer hover:bg-zinc-950'
+                                    : 'cursor-not-allowed hover:bg-red-950',
+                            )}
+                            title={
+                                value.state.type === 'PlayerRegistration' ? 'Join Game' : 'Cannot join game in progress'
+                            }
                             onClick={() => {
+                                if (value.state.type !== 'PlayerRegistration') {
+                                    toast.error('Cannot join game in progress');
+                                    return;
+                                }
                                 navigate(`/game/${key}`);
                             }}
                         >
