@@ -12,11 +12,13 @@ let exampleGame =
         [| { Id = Guid.NewGuid()
              Name = Guid.NewGuid().ToString()
              Ready = true
-             Class = Some Grack }
+             Class = Some Grack
+             Creatures = [||] }
            { Id = Guid.NewGuid()
              Name = Guid.NewGuid().ToString()
              Ready = true
-             Class = Some Grack } |] }
+             Class = Some Grack
+             Creatures = [||] } |] }
 
 [<Test>]
 let GetPlayerById () =

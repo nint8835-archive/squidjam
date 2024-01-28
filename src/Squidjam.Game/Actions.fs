@@ -1,7 +1,6 @@
 module Squidjam.Game.Actions
 
 open System
-open System.Security.Cryptography
 
 type Action =
     | EndTurn of Player: Guid
@@ -25,27 +24,17 @@ let addPlayer (game: Game) (playerGuid: Guid) (playerName: string) : Result<Game
     else if game.Players |> Array.exists (fun p -> p.Id = playerGuid) then
         Error "You are already in this game"
     else
-        let playerSeed =
-            MD5
-                .Create()
-                .ComputeHash(
-                    game.Id.ToByteArray()
-                    |> Array.append (playerGuid.ToByteArray())
-                )
-            |> BitConverter.ToInt32
-
-        let random = Random(playerSeed)
-        
         let player = {
             Id = playerGuid
             Name = playerName
             Ready = false
-            Class = None 
+            Class = None
+            Creatures = [||] 
         }
 
-        let newPlayerArray = Array.append game.Players [| player |]
+        let joinedArray = Array.append game.Players [| player |]
 
-        random.Shuffle newPlayerArray
+        let newPlayerArray = GameUtils.DeterministicShuffle [| player.Id; game.Id |] joinedArray
 
         Ok { game with Players = newPlayerArray }
 

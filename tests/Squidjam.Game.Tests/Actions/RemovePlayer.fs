@@ -13,7 +13,8 @@ let ``Player Not In Game`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None } |] }
+                 Class = None
+                 Creatures = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.RemovePlayer(Guid.NewGuid()))
 
@@ -31,15 +32,18 @@ let ``Remove Player Who's Turn It Is - Beginning of Turn Order`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None }
+                 Class = None
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None }
+                 Class = None
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None } |] }
+                 Class = None
+                 Creatures = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.RemovePlayer(initialGame.Players[0].Id))
@@ -64,15 +68,18 @@ let ``Remove Player Who's Turn It Is - Middle of Turn Order`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None }
+                 Class = None
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None }
+                 Class = None
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None } |] }
+                 Class = None
+                 Creatures = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.RemovePlayer(initialGame.Players[1].Id))
@@ -97,15 +104,18 @@ let ``Remove Player Who's Turn It Is - End of Turn Order`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None }
+                 Class = None
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None }
+                 Class = None
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None } |] }
+                 Class = None
+                 Creatures = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.RemovePlayer(initialGame.Players[2].Id))
@@ -131,11 +141,13 @@ let ``Remove Last Opponent`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None }
+                 Class = None
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None } |] }
+                 Class = None
+                 Creatures = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.RemovePlayer(initialGame.Players[1].Id))
@@ -160,7 +172,8 @@ let ``Remove Last Player`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None } |] }
+                 Class = None
+                 Creatures = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.RemovePlayer(initialGame.Players[0].Id))

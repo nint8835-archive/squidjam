@@ -14,11 +14,13 @@ let ``First Player`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = Some Grack }
+                 Class = Some Grack
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = Some Grack } |] }
+                 Class = Some Grack
+                 Creatures = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0].Id)
 
@@ -35,11 +37,13 @@ let ``Last Player`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = Some Grack }
+                 Class = Some Grack
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = Some Grack } |] }
+                 Class = Some Grack
+                 Creatures = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[1].Id)
 
@@ -56,11 +60,13 @@ let ``Not Player's Turn`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = Some Grack }
+                 Class = Some Grack
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = Some Grack } |] }
+                 Class = Some Grack
+                 Creatures = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0].Id)
 
@@ -84,7 +90,8 @@ let ``Invalid State`` (state: GameState) =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = Some Grack } |] }
+                 Class = Some Grack
+                 Creatures = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0].Id)
 

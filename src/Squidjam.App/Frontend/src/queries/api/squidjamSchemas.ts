@@ -14,6 +14,13 @@ export type AddPlayer = {
 
 export type AddPlayerEnum = 'AddPlayer';
 
+export type Creature = {
+    /**
+     * @format int32
+     */
+    health: number;
+};
+
 export type EndTurn = {
     type: EndTurnEnum;
     /**
@@ -63,6 +70,7 @@ export type Player = {
     name: string;
     ready: boolean;
     ['class']: Grack | Gump | null;
+    creatures: Creature[];
 };
 
 export type PlayerRegistration = {

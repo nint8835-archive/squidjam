@@ -14,7 +14,8 @@ let ``With No Current Class`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = None } |] }
+                 Class = None
+                 Creatures = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.SelectClass(initialGame.Players[0].Id, Grack))
@@ -32,7 +33,8 @@ let ``With Current Class`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = Some Grack } |] }
+                 Class = Some Grack
+                 Creatures = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.SelectClass(initialGame.Players[0].Id, Gump))
@@ -57,7 +59,8 @@ let ``Invalid State`` (state: GameState) =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = Some Grack } |] }
+                 Class = Some Grack
+                 Creatures = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.SelectClass(initialGame.Players[0].Id, Grack))

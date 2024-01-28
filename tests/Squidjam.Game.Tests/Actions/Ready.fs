@@ -14,11 +14,13 @@ let ``Ready Player`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = Some Grack }
+                 Class = Some Grack
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = Some Grack } |] }
+                 Class = Some Grack
+                 Creatures = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
@@ -37,7 +39,8 @@ let ``Single Player Readying Doesn't Start Game`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = Some Grack } |] }
+                 Class = Some Grack
+                 Creatures = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
@@ -56,11 +59,13 @@ let ``All Players Readying Starts Game`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = Some Grack }
+                 Class = Some Grack
+                 Creatures = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = Some Grack } |] }
+                 Class = Some Grack
+                 Creatures = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
@@ -79,7 +84,8 @@ let ``Cannot Ready Without Class Selected`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = None } |] }
+                 Class = None
+                 Creatures = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
@@ -117,7 +123,8 @@ let ``Invalid State`` (state: GameState) =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
-                 Class = Some Grack } |] }
+                 Class = Some Grack
+                 Creatures = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 

@@ -37,7 +37,8 @@ let ``Single Player`` () =
         { Id = Guid.NewGuid()
           Name = Guid.NewGuid().ToString()
           Ready = false
-          Class = None }
+          Class = None
+          Creatures = [||] }
 
     let game =
         Actions.Apply initialGame (Actions.AddPlayer(newPlayer.Id, newPlayer.Name))
@@ -57,19 +58,22 @@ let ``Multiple Players Are Shuffled`` () =
         { Id = Guid("01fa5247-91c6-4c8a-8f7b-3b4f7d5c6f6e")
           Name = "Player 1"
           Ready = false
-          Class = None }
+          Class = None
+          Creatures = [||] }
 
     let player2 =
         { Id = Guid("fc2d0e31-e2e1-4329-8d67-5bce12ea2d88")
           Name = "Player 2"
           Ready = false
-          Class = None }
+          Class = None
+          Creatures = [||] }
 
     let player3 =
         { Id = Guid("338a4db6-25d7-4910-80d7-98bf3b3ad31c")
           Name = "Player 3"
           Ready = false
-          Class = None }
+          Class = None
+          Creatures = [||] }
 
     let gameWith1Player =
         Actions.Apply initialGame (Actions.AddPlayer(player1.Id, player1.Name))
@@ -103,7 +107,8 @@ let ``Unable To Add Player Already In Game`` () =
             [| { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
-                 Class = None } |] }
+                 Class = None
+                 Creatures = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.AddPlayer(initialGame.Players[0].Id, initialGame.Players[0].Name))
