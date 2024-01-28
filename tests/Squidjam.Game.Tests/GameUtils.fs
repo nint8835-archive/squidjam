@@ -21,7 +21,18 @@ let GetPlayerById () =
     let secondPlayer = exampleGame.Players[1]
 
     let player = GameUtils.GetPlayerById exampleGame secondPlayer.Id
-    Assert.AreEqual(secondPlayer, player)
+
+    match player with
+    | None -> Assert.Fail("Expected to get player")
+    | Some p -> Assert.AreEqual(secondPlayer, p)
+
+[<Test>]
+let ``GetPlayerById - Not In Game`` () =
+    let player = GameUtils.GetPlayerById exampleGame (Guid.NewGuid())
+
+    match player with
+    | None -> ()
+    | Some _ -> Assert.Fail("Expected to not get player")
 
 [<Test>]
 let GetPlayerIndex () =

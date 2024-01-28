@@ -2,8 +2,8 @@ module Squidjam.Game.GameUtils
 
 open System
 
-let GetPlayerById (game: Game) (id: Guid) : Player =
-    game.Players |> Array.find (fun p -> p.Id = id)
+let GetPlayerById (game: Game) (id: Guid) : Player option =
+    game.Players |> Array.tryFind (fun p -> p.Id = id)
 
 let GetPlayerIndex (game: Game) (id: Guid) : int =
     game.Players

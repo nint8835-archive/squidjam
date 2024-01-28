@@ -81,6 +81,19 @@ let ``Cannot Ready Without Class Selected`` () =
     | Ok g -> Assert.Fail("Should not be able to ready player without class selected")
     | Error e -> Assert.AreEqual(e, "You must select a class before you can ready")
 
+[<Test>]
+let ``Cannot Ready If Not In Game`` () =
+    let initialGame =
+        { Id = Guid.NewGuid()
+          State = PlayerRegistration
+          Players = [||] }
+
+    let game = Actions.Apply initialGame (Actions.Ready(Guid.NewGuid()))
+
+    match game with
+    | Ok g -> Assert.Fail("Should not be able to ready player not in game")
+    | Error e -> Assert.AreEqual(e, "You are not in this game")
+
 
 let invalidStates =
     [| Ended(None); PlayerTurn(0) |]

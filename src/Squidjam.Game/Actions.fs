@@ -66,10 +66,12 @@ let ready (game: Game) (playerGuid: Guid) : Result<Game, string> =
     
     if game.State <> PlayerRegistration then
         Error $"Unable to ready player in game state %s{game.State.GetType().Name}"
-    else if player.Class.IsNone then
+    else if Option.isNone player then
+        Error "You are not in this game"
+    else if player.Value.Class.IsNone then
         Error "You must select a class before you can ready"
     else
-        let updatedGame = GameUtils.UpdatePlayer game player.Id (fun p -> { p with Ready = true })
+        let updatedGame = GameUtils.UpdatePlayer game player.Value.Id (fun p -> { p with Ready = true })
         
         if updatedGame.Players |> Array.forall (_.Ready) && updatedGame.Players.Length > 1 then
             Ok { updatedGame with State = PlayerTurn 0 }
