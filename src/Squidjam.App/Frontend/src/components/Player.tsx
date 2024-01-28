@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { usePerformAction } from '../queries/api/squidjamComponents';
 import * as Schema from '../queries/api/squidjamSchemas';
 import { useStore } from '../store';
@@ -10,7 +11,7 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
         currentGame: { id: gameId },
         player: currentPlayer,
     } = useStore();
-    const { mutateAsync: performAction } = usePerformAction({});
+    const { mutateAsync: performAction } = usePerformAction({ onError: (err) => toast.error(err.stack) });
 
     const isCurrentPlayer = player.id === currentPlayer;
 
