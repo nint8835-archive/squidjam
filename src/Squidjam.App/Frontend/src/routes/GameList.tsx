@@ -1,7 +1,7 @@
 import { UserIcon } from '@heroicons/react/24/outline';
-import { useCreateGame, useListGames, usePerformAction } from '../queries/api/squidjamComponents';
+import { useNavigate } from 'react-router-dom';
+import { useCreateGame, useListGames } from '../queries/api/squidjamComponents';
 import * as Schema from '../queries/api/squidjamSchemas';
-import { useStore } from '../store';
 import { cn } from '../util';
 
 const stateFormatters: Record<Schema.Game['state']['type'], (state: Schema.Game['state']) => string> = {
@@ -32,11 +32,10 @@ function StateBadge({ state }: { state: Schema.Game['state'] }) {
     );
 }
 
-export default function GameList() {
+export default function GameListPage() {
     const { data: games, isLoading, isError, refetch } = useListGames({}, { refetchInterval: 5000 });
     const { mutateAsync: createGame } = useCreateGame({});
-    const { mutateAsync: performAction } = usePerformAction({});
-    const { player } = useStore();
+    const navigate = useNavigate();
 
     return (
         <div className="space-y-4 p-4">
@@ -61,12 +60,8 @@ export default function GameList() {
                         <div
                             key={key}
                             className="cursor-pointer rounded-md p-2 transition-all hover:bg-zinc-950"
-                            onClick={async () => {
-                                await performAction({
-                                    pathParams: { gameId: key },
-                                    body: { player, type: 'AddPlayer' },
-                                });
-                                refetch();
+                            onClick={() => {
+                                navigate(`/game/${key}`);
                             }}
                         >
                             <h2 className="text-xl">{key}</h2>

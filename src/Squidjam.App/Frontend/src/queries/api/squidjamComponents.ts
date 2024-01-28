@@ -63,6 +63,46 @@ export const useCreateGame = (
     });
 };
 
+export type GetGamePathParams = {
+    /**
+     * @format uuid
+     */
+    gameId: string;
+};
+
+export type GetGameError = Fetcher.ErrorWrapper<{
+    status: 404;
+    payload: string;
+}>;
+
+export type GetGameVariables = {
+    pathParams: GetGamePathParams;
+} & SquidjamContext['fetcherOptions'];
+
+export const fetchGetGame = (variables: GetGameVariables, signal?: AbortSignal) =>
+    squidjamFetch<Schemas.Game, GetGameError, undefined, {}, {}, GetGamePathParams>({
+        url: '/api/games/{gameId}',
+        method: 'get',
+        ...variables,
+        signal,
+    });
+
+export const useGetGame = <TData = Schemas.Game>(
+    variables: GetGameVariables,
+    options?: Omit<
+        reactQuery.UseQueryOptions<Schemas.Game, GetGameError, TData>,
+        'queryKey' | 'queryFn' | 'initialData'
+    >,
+) => {
+    const { fetcherOptions, queryOptions, queryKeyFn } = useSquidjamContext(options);
+    return reactQuery.useQuery<Schemas.Game, GetGameError, TData>({
+        queryKey: queryKeyFn({ path: '/api/games/{gameId}', operationId: 'getGame', variables }),
+        queryFn: ({ signal }) => fetchGetGame({ ...fetcherOptions, ...variables }, signal),
+        ...options,
+        ...queryOptions,
+    });
+};
+
 export type PerformActionPathParams = {
     /**
      * @format uuid
@@ -109,8 +149,14 @@ export const usePerformAction = (
     });
 };
 
-export type QueryOperation = {
-    path: '/api/games';
-    operationId: 'listGames';
-    variables: ListGamesVariables;
-};
+export type QueryOperation =
+    | {
+          path: '/api/games';
+          operationId: 'listGames';
+          variables: ListGamesVariables;
+      }
+    | {
+          path: '/api/games/{gameId}';
+          operationId: 'getGame';
+          variables: GetGameVariables;
+      };

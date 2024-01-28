@@ -39,6 +39,14 @@ app.MapPost("/api/games", () => {
 	return newGame;
 }).WithName("CreateGame");
 
+app.MapGet("/api/games/{gameId:guid}", Results<Ok<Game>, NotFound<string>> (Guid gameId) => {
+	if (!games.TryGetValue(gameId, out Game? value)) {
+		return TypedResults.NotFound("Game not found");
+	}
+
+	return TypedResults.Ok(value);
+}).WithName("GetGame");
+
 app.MapPost("/api/games/{gameId:guid}/action",
 	Results<Ok<Game>, NotFound<string>, BadRequest<string>> (IHubContext<GameHub> hub, PlayerConnectionManager manager, Guid gameId,
 		Actions.Action action) => {
@@ -59,6 +67,8 @@ app.MapPost("/api/games/{gameId:guid}/action",
 		if (action.IsAddPlayer) {
 			Actions.Action.AddPlayer addPlayer = (Actions.Action.AddPlayer)action;
 
+			// TODO: Handle when a player is not yet connected to SignalR
+			// TODO: Do syncing on a fresh connection to SignalR if the player is already in games
 			var connectionIds = manager.GetConnectionIds(addPlayer.Player);
 
 			foreach (string connectionId in connectionIds) {
