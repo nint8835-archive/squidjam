@@ -89,6 +89,16 @@ export type Ready = {
 
 export type ReadyEnum = 'Ready';
 
+export type RemovePlayer = {
+    type: RemovePlayerEnum;
+    /**
+     * @format uuid
+     */
+    player: string;
+};
+
+export type RemovePlayerEnum = 'RemovePlayer';
+
 export type SelectClass = {
     type: SelectClassEnum;
     /**

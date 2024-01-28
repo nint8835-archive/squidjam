@@ -17,12 +17,14 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
 
     const playerColour = playerColours[playerIndex % 3];
 
-    const actions: { label: string; body: Schema.SelectClass | Schema.Ready | Schema.EndTurn }[] = [
-        { label: 'Grack', body: { type: 'SelectClass', class: { type: 'Grack' }, player: currentPlayer } },
-        { label: 'Gump', body: { type: 'SelectClass', class: { type: 'Gump' }, player: currentPlayer } },
-        { label: 'Ready', body: { type: 'Ready', player: currentPlayer } },
-        { label: 'End Turn', body: { type: 'EndTurn', player: currentPlayer } },
-    ];
+    const actions: { label: string; body: Schema.SelectClass | Schema.Ready | Schema.EndTurn | Schema.RemovePlayer }[] =
+        [
+            { label: 'Grack', body: { type: 'SelectClass', class: { type: 'Grack' }, player: currentPlayer } },
+            { label: 'Gump', body: { type: 'SelectClass', class: { type: 'Gump' }, player: currentPlayer } },
+            { label: 'Ready', body: { type: 'Ready', player: currentPlayer } },
+            { label: 'End Turn', body: { type: 'EndTurn', player: currentPlayer } },
+            { label: 'Leave Game', body: { type: 'RemovePlayer', player: currentPlayer } },
+        ];
 
     return (
         <div className={cn('p-2', playerColour)}>

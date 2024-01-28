@@ -74,6 +74,15 @@ app.MapPost("/api/games/{gameId:guid}/action",
 				hub.Groups.AddToGroupAsync(connectionId, gameId.ToString());
 			}
 		}
+		else if (action.IsRemovePlayer) {
+			Actions.Action.RemovePlayer removePlayer = (Actions.Action.RemovePlayer)action;
+
+			var connectionIds = manager.GetConnectionIds(removePlayer.Player);
+
+			foreach (string connectionId in connectionIds) {
+				hub.Groups.RemoveFromGroupAsync(connectionId, gameId.ToString());
+			}
+		}
 
 		hub.Clients.Groups(gameId.ToString()).SendAsync("GameUpdated", newGame.ResultValue);
 

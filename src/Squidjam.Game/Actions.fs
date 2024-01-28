@@ -6,6 +6,7 @@ open System.Security.Cryptography
 type Action =
     | EndTurn of Player: Guid
     | AddPlayer of Player: Guid
+    | RemovePlayer of Player: Guid
     | Ready of Player: Guid
     | SelectClass of Player: Guid * Class: Class
 
@@ -47,6 +48,19 @@ let addPlayer (game: Game) (playerGuid: Guid) : Result<Game, string> =
 
         Ok { game with Players = newPlayerArray }
 
+let removePlayer (game: Game) (playerGuid: Guid) : Result<Game, string> =
+    if game.Players |> Array.exists (fun p -> p.Id = playerGuid) then
+        let newPlayerArray = game.Players |> Array.filter (fun p -> p.Id <> playerGuid)
+
+        Ok { game with
+                Players = newPlayerArray;
+                State = match game.State with
+                        | PlayerTurn playerIndex -> PlayerTurn(playerIndex % newPlayerArray.Length)
+                        | _ -> game.State
+             }
+    else
+        Error "You are not in this game"
+
 let ready (game: Game) (playerGuid: Guid) : Result<Game, string> =
     let player = GameUtils.GetPlayerById game playerGuid
     
@@ -75,5 +89,6 @@ let Apply (game: Game) (action: Action) : Result<Game, string> =
     match action with
     | EndTurn player -> endTurn game player
     | AddPlayer player -> addPlayer game player
+    | RemovePlayer player -> removePlayer game player
     | Ready player -> ready game player
     | SelectClass (player, newClass) -> selectClass game player newClass
