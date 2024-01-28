@@ -2,6 +2,11 @@ module Squidjam.Game.Actions
 
 open System
 
+let ClassCreatures = Map<Class, Creature array>([
+    (Class.Grack, [| {Health = 10}; {Health = 15}; {Health = 10} |])
+    (Class.Gump, [| {Health = 5}; {Health = 5}; {Health = 5}; {Health = 5}; {Health = 5}; {Health = 5}; {Health = 5} |])
+])
+
 type Action =
     | EndTurn of Player: Guid
     | AddPlayer of Player: Guid * Name: string
@@ -73,7 +78,7 @@ let selectClass (game: Game) (player: Guid) (newClass: Class) : Result<Game, Str
     if game.State <> PlayerRegistration then
         Error $"Unable to select class in game state %s{game.State.GetType().Name}"
     else
-        let updatedGame = GameUtils.UpdatePlayer game player (fun p -> { p with Class = Some newClass })
+        let updatedGame = GameUtils.UpdatePlayer game player (fun p -> { p with Class = Some newClass; Creatures = ClassCreatures[newClass] })
 
         Ok updatedGame
 

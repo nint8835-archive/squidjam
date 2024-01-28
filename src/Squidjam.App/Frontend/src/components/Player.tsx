@@ -4,6 +4,7 @@ import { usePerformAction } from '../queries/api/squidjamComponents';
 import * as Schema from '../queries/api/squidjamSchemas';
 import { useStore } from '../store';
 import { cn } from '../util';
+import Creature from './Creature';
 
 const playerColours = ['bg-red-900', 'bg-purple-900', 'bg-blue-900'];
 
@@ -70,6 +71,13 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
                         End Turn
                     </button>
                 )}
+            </div>
+
+            {/* Creature UI */}
+            <div>
+                {player.creatures.map((creature, creatureIndex) => (
+                    <Creature creature={creature} creatureIndex={creatureIndex} player={player} />
+                ))}
             </div>
 
             {/* Class selection / ready-up UI */}
