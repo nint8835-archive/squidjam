@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Squidjam.App;
 
-public class GameHub(PlayerConnectionManager manager) : Hub {
+public class GameHub(PlayerConnectionManager manager, GameManager gameManager) : Hub {
 	private Guid? GetPlayerId() {
 		string? playerId = Context.GetHttpContext().Request.Query["playerId"].First();
 		if (playerId == null) {
@@ -24,6 +24,12 @@ public class GameHub(PlayerConnectionManager manager) : Hub {
 		}
 
 		manager.AddPlayer((Guid)playerId, Context.ConnectionId);
+
+		var playerGames = gameManager.GetPlayerGames((Guid)playerId);
+
+		foreach (Game.Game game in playerGames) {
+			Groups.AddToGroupAsync(Context.ConnectionId, game.Id.ToString());
+		}
 
 		return base.OnConnectedAsync();
 	}

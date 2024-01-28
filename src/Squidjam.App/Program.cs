@@ -7,8 +7,6 @@ using Squidjam.App;
 using Squidjam.Game;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-var games = new Dictionary<Guid, Game>();
-
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 JsonFSharpOptions? fsOptions = JsonFSharpOptions.Default().WithUnionTagName("type").WithUnionNamedFields().WithUnionInternalTag();
@@ -17,7 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerForSystemTextJson(fsOptions, FSharpOption<FSharpFunc<SwaggerGenOptions, Unit>>.None);
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonFSharpConverter(fsOptions)));
 builder.Services.AddSignalR().AddJsonProtocol(options => options.PayloadSerializerOptions.Converters.Add(new JsonFSharpConverter(fsOptions)));
+
 builder.Services.AddSingleton<PlayerConnectionManager>();
+builder.Services.AddSingleton<GameManager>();
 
 WebApplication app = builder.Build();
 
@@ -31,16 +31,16 @@ app.MapFallbackToFile("index.html");
 
 app.MapHub<GameHub>("/api/realtime");
 
-app.MapGet("/api/games", () => games).WithName("ListGames");
-app.MapPost("/api/games", () => {
+app.MapGet("/api/games", (GameManager manager) => manager.GetGames()).WithName("ListGames");
+app.MapPost("/api/games", (GameManager manager) => {
 	Game newGame = new Game(Guid.NewGuid(), GameState.PlayerRegistration, []);
-	games.Add(newGame.Id, newGame);
+	manager.Store(newGame);
 
 	return newGame;
 }).WithName("CreateGame");
 
-app.MapGet("/api/games/{gameId:guid}", Results<Ok<Game>, NotFound<string>> (Guid gameId) => {
-	if (!games.TryGetValue(gameId, out Game? value)) {
+app.MapGet("/api/games/{gameId:guid}", Results<Ok<Game>, NotFound<string>> (GameManager manager, Guid gameId) => {
+	if (!manager.TryGetGame(gameId, out Game? value)) {
 		return TypedResults.NotFound("Game not found");
 	}
 
@@ -48,9 +48,10 @@ app.MapGet("/api/games/{gameId:guid}", Results<Ok<Game>, NotFound<string>> (Guid
 }).WithName("GetGame");
 
 app.MapPost("/api/games/{gameId:guid}/action",
-	Results<Ok<Game>, NotFound<string>, BadRequest<string>> (IHubContext<GameHub> hub, PlayerConnectionManager manager, Guid gameId,
+	Results<Ok<Game>, NotFound<string>, BadRequest<string>> (IHubContext<GameHub> hub, PlayerConnectionManager manager, GameManager gameManager,
+		Guid gameId,
 		Actions.Action action) => {
-		if (!games.TryGetValue(gameId, out Game? value)) {
+		if (!gameManager.TryGetGame(gameId, out Game? value)) {
 			return TypedResults.NotFound("Game not found");
 		}
 
@@ -62,13 +63,11 @@ app.MapPost("/api/games/{gameId:guid}/action",
 			return TypedResults.BadRequest(newGame.ErrorValue);
 		}
 
-		games[gameId] = newGame.ResultValue;
+		gameManager.Store(newGame.ResultValue);
 
 		if (action.IsAddPlayer) {
 			Actions.Action.AddPlayer addPlayer = (Actions.Action.AddPlayer)action;
 
-			// TODO: Handle when a player is not yet connected to SignalR
-			// TODO: Do syncing on a fresh connection to SignalR if the player is already in games
 			var connectionIds = manager.GetConnectionIds(addPlayer.Player);
 
 			foreach (string connectionId in connectionIds) {

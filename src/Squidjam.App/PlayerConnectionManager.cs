@@ -32,6 +32,6 @@ public class PlayerConnectionManager {
 	}
 
 	public HashSet<string> GetConnectionIds(Guid playerId) {
-		return _playerConnections[playerId];
+		return _playerConnections.GetValueOrDefault(playerId, []);
 	}
 }
