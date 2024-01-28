@@ -11,7 +11,7 @@ type GameState =
     | PlayerTurn of PlayerIndex: int
     | Ended of Winner: Guid option
 
-type Creature = { Health: int }
+type Creature = { Name: string; Health: int }
 
 
 type Player =

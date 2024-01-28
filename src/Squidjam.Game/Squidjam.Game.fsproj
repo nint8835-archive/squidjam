@@ -8,6 +8,7 @@
     <ItemGroup>
         <Compile Include="Game.fs"/>
         <Compile Include="GameUtils.fs"/>
+        <Compile Include="Creatures.fs"/>
         <Compile Include="Actions.fs"/>
     </ItemGroup>
 

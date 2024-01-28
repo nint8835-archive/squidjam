@@ -23,7 +23,7 @@ let ``With No Current Class`` () =
     match game with
     | Ok g ->
         Assert.AreEqual(g.Players[0].Class, Some Grack)
-        Assert.AreEqual(g.Players[0].Creatures, Actions.ClassCreatures[Grack])
+        Assert.AreEqual(g.Players[0].Creatures, Creatures.ClassCreatures[Grack])
     | Error e -> Assert.Fail(e)
 
 [<Test>]
@@ -36,7 +36,7 @@ let ``With Current Class`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = Actions.ClassCreatures[Grack] } |] }
+                 Creatures = Creatures.ClassCreatures[Grack] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.SelectClass(initialGame.Players[0].Id, Gump))
@@ -44,7 +44,7 @@ let ``With Current Class`` () =
     match game with
     | Ok g ->
         Assert.AreEqual(g.Players[0].Class, Some Gump)
-        Assert.AreEqual(g.Players[0].Creatures, Actions.ClassCreatures[Gump])
+        Assert.AreEqual(g.Players[0].Creatures, Creatures.ClassCreatures[Gump])
     | Error e -> Assert.Fail(e)
 
 let invalidStates =

@@ -7,8 +7,7 @@ let GetPlayerById (game: Game) (id: Guid) : Player option =
     game.Players |> Array.tryFind (fun p -> p.Id = id)
 
 let GetPlayerIndex (game: Game) (id: Guid) : int =
-    game.Players
-    |> Array.findIndex (fun p -> p.Id = id)
+    game.Players |> Array.findIndex (fun p -> p.Id = id)
 
 let UpdatePlayer (game: Game) (id: Guid) (f: Player -> Player) : Game =
     let index = GetPlayerIndex game id
@@ -20,16 +19,14 @@ let UpdatePlayer (game: Game) (id: Guid) (f: Player -> Player) : Game =
 // TODO: Test
 let DeterministicShuffle (seeds: Guid array) array =
     let seed =
-            MD5
-                .Create()
-                .ComputeHash(
-                    seeds |> Array.map (_.ToByteArray()) |> Array.concat
-                )
-            |> BitConverter.ToInt32
-    
+        MD5
+            .Create()
+            .ComputeHash(seeds |> Array.map (fun s -> s.ToByteArray()) |> Array.concat)
+        |> BitConverter.ToInt32
+
     let random = Random(seed)
-    
+
     let clonedArray = Array.copy array
     random.Shuffle clonedArray
-    
+
     clonedArray

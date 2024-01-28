@@ -15,6 +15,7 @@ export type AddPlayer = {
 export type AddPlayerEnum = 'AddPlayer';
 
 export type Creature = {
+    name: string;
     /**
      * @format int32
      */
