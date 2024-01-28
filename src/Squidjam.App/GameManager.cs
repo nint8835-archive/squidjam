@@ -1,9 +1,11 @@
+using System.Collections.Concurrent;
+
 namespace Squidjam.App;
 
 public class GameManager {
-	private readonly Dictionary<Guid, Game.Game> _games = new Dictionary<Guid, Game.Game>();
+	private readonly ConcurrentDictionary<Guid, Game.Game> _games = new ConcurrentDictionary<Guid, Game.Game>();
 
-	public Dictionary<Guid, Game.Game> GetGames() {
+	public ConcurrentDictionary<Guid, Game.Game> GetGames() {
 		return _games;
 	}
 
