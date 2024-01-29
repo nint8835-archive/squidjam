@@ -50,6 +50,7 @@ let UpdatePlayer () =
     let secondPlayer = exampleGame.Players.[1]
 
     let updatedGame =
-        GameUtils.UpdatePlayer exampleGame secondPlayer.Id (fun p -> { p with Ready = false })
+        exampleGame
+        |> GameUtils.UpdatePlayer secondPlayer.Id (fun p -> { p with Ready = false })
 
     Assert.AreEqual(updatedGame.Players[1], { secondPlayer with Ready = false })

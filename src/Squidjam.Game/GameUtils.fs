@@ -9,7 +9,7 @@ let GetPlayerById (game: Game) (id: Guid) : Player option =
 let GetPlayerIndex (game: Game) (id: Guid) : int =
     game.Players |> Array.findIndex (fun p -> p.Id = id)
 
-let UpdatePlayer (game: Game) (id: Guid) (f: Player -> Player) : Game =
+let UpdatePlayer (id: Guid) (f: Player -> Player) (game: Game) : Game =
     let index = GetPlayerIndex game id
     let player = game.Players[index]
     let updatedPlayer = f player

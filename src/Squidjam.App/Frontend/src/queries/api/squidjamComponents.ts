@@ -122,7 +122,13 @@ export type PerformActionError = Fetcher.ErrorWrapper<
 >;
 
 export type PerformActionVariables = {
-    body?: Schemas.EndTurn | Schemas.AddPlayer | Schemas.RemovePlayer | Schemas.Ready | Schemas.SelectClass;
+    body?:
+        | Schemas.EndTurn
+        | Schemas.AddPlayer
+        | Schemas.RemovePlayer
+        | Schemas.Ready
+        | Schemas.SelectClass
+        | Schemas.Attack;
     pathParams: PerformActionPathParams;
 } & SquidjamContext['fetcherOptions'];
 
@@ -130,7 +136,12 @@ export const fetchPerformAction = (variables: PerformActionVariables, signal?: A
     squidjamFetch<
         Schemas.Game,
         PerformActionError,
-        Schemas.EndTurn | Schemas.AddPlayer | Schemas.RemovePlayer | Schemas.Ready | Schemas.SelectClass,
+        | Schemas.EndTurn
+        | Schemas.AddPlayer
+        | Schemas.RemovePlayer
+        | Schemas.Ready
+        | Schemas.SelectClass
+        | Schemas.Attack,
         {},
         {},
         PerformActionPathParams

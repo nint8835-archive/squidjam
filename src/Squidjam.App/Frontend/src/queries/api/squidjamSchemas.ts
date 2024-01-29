@@ -14,6 +14,28 @@ export type AddPlayer = {
 
 export type AddPlayerEnum = 'AddPlayer';
 
+export type Attack = {
+    type: AttackEnum;
+    /**
+     * @format uuid
+     */
+    player: string;
+    /**
+     * @format int32
+     */
+    attackingCreatureIndex: number;
+    /**
+     * @format uuid
+     */
+    targetPlayer: string;
+    /**
+     * @format int32
+     */
+    targetCreatureIndex: number;
+};
+
+export type AttackEnum = 'Attack';
+
 export type Creature = {
     name: string;
     /**

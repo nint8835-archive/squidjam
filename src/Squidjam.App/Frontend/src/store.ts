@@ -10,6 +10,9 @@ export interface Store {
     playerName: string;
     setPlayerName: (name: string) => void;
 
+    attackingCreatureIndex?: number;
+    setAttackingCreatureIndex: (index?: number) => void;
+
     currentGame: Schema.Game;
     signalRConnection?: signalR.HubConnection;
     signalRState: signalR.HubConnectionState;
@@ -25,6 +28,9 @@ export const useStore = create<Store>()(
 
                 playerName: `Unnamed Player ${Math.floor(Math.random() * 1000)}`,
                 setPlayerName: (name) => set({ playerName: name }, undefined, 'setPlayerName'),
+
+                setAttackingCreatureIndex: (index) =>
+                    set({ attackingCreatureIndex: index }, undefined, 'setAttackingCreatureIndex'),
 
                 signalRState: signalR.HubConnectionState.Disconnected,
                 currentGame: { id: '', players: [], state: { type: 'PlayerRegistration' } },
@@ -44,7 +50,11 @@ export const useStore = create<Store>()(
                     );
 
                     connection.on('GameUpdated', (game: Schema.Game) => {
-                        set({ currentGame: game }, undefined, 'updateGameFromSignalR');
+                        set(
+                            { currentGame: game, attackingCreatureIndex: undefined },
+                            undefined,
+                            'updateGameFromSignalR',
+                        );
                     });
 
                     function updateSignalRConnectionState() {
