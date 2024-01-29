@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'Lyhyt Lauantai';
+    src: url('/fonts/Lyhyt Lauantai.woff2') format('woff2'), url('/fonts/Lyhyt Lauantai.woff') format('woff');
+}

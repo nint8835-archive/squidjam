@@ -2,7 +2,16 @@
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                gump: ['Lyhyt Lauantai'],
+            },
+        },
+        heroPatterns: {
+            eyes: require('tailwindcss-hero-patterns/src/patterns').eyes,
+            floatingcogs: require('tailwindcss-hero-patterns/src/patterns').floatingcogs,
+        },
+        heroPatternsColors: ['zinc'],
     },
-    plugins: [],
+    plugins: [require('tailwindcss-hero-patterns')],
 };

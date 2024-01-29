@@ -24,7 +24,7 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
 
     return (
         <div className={cn('bg-opacity-50 p-2', playerColour, isPlayersTurn && 'border-l-2 border-l-white')}>
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify-between pb-2">
                 <div className="text-xl">
                     {player.name}{' '}
                     <span className="text-sm">
@@ -74,7 +74,7 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
             </div>
 
             {/* Creature UI */}
-            <div>
+            <div className="flex w-full flex-row justify-between gap-4 overflow-auto">
                 {player.creatures.map((creature, creatureIndex) => (
                     <Creature creature={creature} creatureIndex={creatureIndex} player={player} />
                 ))}

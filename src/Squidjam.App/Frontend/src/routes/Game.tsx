@@ -33,7 +33,7 @@ export default function GamePage() {
                     </button>
                 </div>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 overflow-auto">
                 {currentGame.players.map((player, playerIndex) =>
                     player.id === currentPlayer ? null : (
                         <Player player={player} playerIndex={playerIndex} key={player.id} />
