@@ -20,6 +20,11 @@ export type Creature = {
      * @format int32
      */
     health: number;
+    /**
+     * @format int32
+     */
+    attack: number;
+    hasAttacked: boolean;
 };
 
 export type EndTurn = {
