@@ -9,6 +9,15 @@ import Creature from './Creature';
 const playerColours = ['bg-red-900', 'bg-purple-900', 'bg-blue-900'];
 
 const classes: Schema.SelectClass['class']['type'][] = ['Grack', 'Gump'];
+const classClasses: Record<Schema.SelectClass['class']['type'], string> = {
+    Grack: 'font-mono',
+    Gump: 'font-gump',
+};
+
+const activeClassClasses: Record<Schema.SelectClass['class']['type'], string> = {
+    Grack: 'heropattern-floatingcogs-zinc-950',
+    Gump: 'heropattern-eyes-zinc-950',
+};
 
 export default function Player({ player, playerIndex }: { player: Schema.Player; playerIndex: number }) {
     const {
@@ -88,8 +97,10 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
                         {classes.map((className) => (
                             <button
                                 className={cn(
-                                    'h-24 w-24 rounded-lg border-2 border-hidden bg-opacity-5 text-lg transition-all hover:bg-black hover:bg-opacity-25',
-                                    player.class && player.class.type === className && 'border-solid border-white',
+                                    'h-24 w-24 rounded-lg border-2 border-hidden border-black bg-opacity-5 text-lg transition-all hover:bg-black hover:bg-opacity-25',
+                                    classClasses[className],
+                                    player.class && player.class.type === className && 'border-solid',
+                                    player.class && player.class.type === className && activeClassClasses[className],
                                 )}
                                 key={className}
                                 onClick={async () => {
