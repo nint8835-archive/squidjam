@@ -2,6 +2,17 @@ module Squidjam.Game.Actions
 
 open System
 
+let checkWinState (game: Game) : Game =
+    let alivePlayers = game.Players |> Array.filter (fun p -> p.Creatures.Length > 0)
+
+    if alivePlayers.Length = 1 then
+        { game with
+            State = Ended(Some alivePlayers.[0].Id) }
+    else if alivePlayers.Length = 0 then
+        { game with State = Ended(None) }
+    else
+        game
+
 type Action =
     | EndTurn of Player: Guid
     | AddPlayer of Player: Guid * Name: string
@@ -160,6 +171,7 @@ let attack
                             p.Creatures
                             |> Array.updateAt targetCreatureIndex updatedTarget
                             |> Array.filter (fun c -> c.Health > 0) })
+                |> checkWinState
                 |> Ok
     | _ -> Error $"Unable to attack in game state %s{game.State.GetType().Name}"
 
