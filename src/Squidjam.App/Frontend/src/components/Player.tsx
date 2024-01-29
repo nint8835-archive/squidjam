@@ -33,8 +33,8 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
 
     return (
         <div className={cn('bg-opacity-50 p-2', playerColour, isPlayersTurn && 'border-l-2 border-l-white')}>
-            <div className="flex flex-row justify-between pb-2">
-                <div className="text-xl">
+            <div className="flex flex-row items-center justify-between pb-2">
+                <div className="flex-1 text-xl">
                     {player.name}{' '}
                     <span className="text-sm">
                         {'('}
@@ -43,43 +43,57 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
                     </span>
                 </div>
 
-                {/* Ready status */}
-                {gameState.type === 'PlayerRegistration' && (
-                    <div
-                        className={cn(
-                            'flex flex-row items-center gap-2 italic ',
-                            player.ready ? 'text-green-500' : 'text-white text-opacity-25',
-                        )}
-                    >
-                        {player.ready ? (
-                            <>
-                                Ready <CheckCircleIcon className="w-6" />
-                            </>
-                        ) : (
-                            <>
-                                Not Ready <XCircleIcon className="w-6" />
-                            </>
-                        )}
+                {/* Player stats */}
+                {gameState.type === 'PlayerTurn' && (
+                    <div className="flex flex-1 flex-row justify-center">
+                        <div className="flex flex-row items-center gap-2 text-xl">
+                            {player.creatures.map((c) => c.health).reduce((partialSum, a) => partialSum + a, 0)}
+                            <span className="text-sm">HP</span>
+                        </div>
                     </div>
                 )}
 
-                {/* End turn button */}
-                {isPlayersTurn && isCurrentPlayer && (
-                    <button
-                        className="rounded-sm bg-blue-600 px-2 transition-all hover:bg-blue-700"
-                        onClick={async () => {
-                            await performAction({
-                                pathParams: { gameId },
-                                body: {
-                                    type: 'EndTurn',
-                                    player: player.id,
-                                },
-                            });
-                        }}
-                    >
-                        End Turn
-                    </button>
-                )}
+                <div className="flex flex-1 flex-row-reverse">
+                    {/* Ready status */}
+                    {gameState.type === 'PlayerRegistration' && (
+                        <div
+                            className={cn(
+                                'flex flex-row items-center gap-2 italic ',
+                                player.ready ? 'text-green-500' : 'text-white text-opacity-25',
+                            )}
+                        >
+                            {player.ready ? (
+                                <>
+                                    Ready <CheckCircleIcon className="w-6" />
+                                </>
+                            ) : (
+                                <>
+                                    Not Ready <XCircleIcon className="w-6" />
+                                </>
+                            )}
+                        </div>
+                    )}
+
+                    {/* End turn button */}
+                    {isPlayersTurn && isCurrentPlayer && (
+                        <div>
+                            <button
+                                className="flex-1 rounded-sm bg-blue-600 px-2 transition-all hover:bg-blue-700"
+                                onClick={async () => {
+                                    await performAction({
+                                        pathParams: { gameId },
+                                        body: {
+                                            type: 'EndTurn',
+                                            player: player.id,
+                                        },
+                                    });
+                                }}
+                            >
+                                End Turn
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Creature UI */}
