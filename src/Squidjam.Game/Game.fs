@@ -11,12 +11,15 @@ type GameState =
     | PlayerTurn of PlayerIndex: int
     | Ended of Winner: Guid option
 
-type Creature =
+type Mutation = { Name: string; Description: string }
+
+and Creature =
     { Name: string
       Health: int
       // TODO: Should attack be caused by mutations, rather than a direct attribute?
       Attack: int
-      HasAttacked: bool }
+      HasAttacked: bool
+      Mutations: Mutation option array }
 
 
 type Player =
@@ -24,7 +27,10 @@ type Player =
       Name: string
       Ready: bool
       Class: Class option
-      Creatures: Creature array }
+      Creatures: Creature array
+
+      MutationDeck: Mutation array
+      MutationHand: Mutation array }
 
 type Game =
     { Id: Guid

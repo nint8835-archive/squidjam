@@ -47,6 +47,7 @@ export type Creature = {
      */
     attack: number;
     hasAttacked: boolean;
+    mutations: Mutation[];
 };
 
 export type EndTurn = {
@@ -90,6 +91,11 @@ export type Gump = {
 
 export type GumpEnum = 'Gump';
 
+export type Mutation = {
+    name: string;
+    description: string;
+};
+
 export type Player = {
     /**
      * @format uuid
@@ -99,6 +105,8 @@ export type Player = {
     ready: boolean;
     ['class']: Grack | Gump | null;
     creatures: Creature[];
+    mutationDeck: Mutation[];
+    mutationHand: Mutation[];
 };
 
 export type PlayerRegistration = {

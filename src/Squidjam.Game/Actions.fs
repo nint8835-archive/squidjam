@@ -50,7 +50,9 @@ let addPlayer (game: Game) (playerGuid: Guid) (playerName: string) : Result<Game
               Name = playerName
               Ready = false
               Class = None
-              Creatures = [||] }
+              Creatures = [||]
+              MutationDeck = [||]
+              MutationHand = [||] }
 
         let joinedArray = Array.append game.Players [| player |]
 
@@ -113,7 +115,8 @@ let selectClass (game: Game) (player: Guid) (newClass: Class) : Result<Game, Str
             |> GameUtils.UpdatePlayer player (fun p ->
                 { p with
                     Class = Some newClass
-                    Creatures = Creatures.ClassCreatures[newClass] })
+                    Creatures = Creatures.ClassCreatures[newClass]
+                    MutationDeck = Mutations.ClassMutations[newClass] })
 
         Ok updatedGame
 

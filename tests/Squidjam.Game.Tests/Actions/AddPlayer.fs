@@ -6,8 +6,7 @@ open NUnit.Framework
 open Squidjam.Game
 
 let invalidStates =
-    [| Ended(None); PlayerTurn(0) |]
-    |> Array.map (fun state -> TestCaseData(state))
+    [| Ended(None); PlayerTurn(0) |] |> Array.map (fun state -> TestCaseData(state))
 
 [<Test>]
 [<TestCaseSource("invalidStates")>]
@@ -38,13 +37,20 @@ let ``Single Player`` () =
           Name = Guid.NewGuid().ToString()
           Ready = false
           Class = None
-          Creatures = [||] }
+          Creatures = [||]
+          MutationDeck = [||]
+          MutationHand = [||] }
 
     let game =
         Actions.Apply initialGame (Actions.AddPlayer(newPlayer.Id, newPlayer.Name))
 
     match game with
-    | Ok g -> Assert.AreEqual(g, { initialGame with Players = [| newPlayer |] })
+    | Ok g ->
+        Assert.AreEqual(
+            g,
+            { initialGame with
+                Players = [| newPlayer |] }
+        )
     | Error e -> Assert.Fail(e)
 
 [<Test>]
@@ -59,21 +65,27 @@ let ``Multiple Players Are Shuffled`` () =
           Name = "Player 1"
           Ready = false
           Class = None
-          Creatures = [||] }
+          Creatures = [||]
+          MutationDeck = [||]
+          MutationHand = [||] }
 
     let player2 =
         { Id = Guid("fc2d0e31-e2e1-4329-8d67-5bce12ea2d88")
           Name = "Player 2"
           Ready = false
           Class = None
-          Creatures = [||] }
+          Creatures = [||]
+          MutationDeck = [||]
+          MutationHand = [||] }
 
     let player3 =
         { Id = Guid("338a4db6-25d7-4910-80d7-98bf3b3ad31c")
           Name = "Player 3"
           Ready = false
           Class = None
-          Creatures = [||] }
+          Creatures = [||]
+          MutationDeck = [||]
+          MutationHand = [||] }
 
     let gameWith1Player =
         Actions.Apply initialGame (Actions.AddPlayer(player1.Id, player1.Name))
@@ -108,7 +120,9 @@ let ``Unable To Add Player Already In Game`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.AddPlayer(initialGame.Players[0].Id, initialGame.Players[0].Name))

@@ -15,18 +15,27 @@ let ``Ready Player`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = Some Grack
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = Some Grack
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
     match game with
     | Ok g ->
-        Assert.AreEqual(g.Players[0], { initialGame.Players[0] with Ready = true })
+        Assert.AreEqual(
+            g.Players[0],
+            { initialGame.Players[0] with
+                Ready = true }
+        )
+
         Assert.AreEqual(g.State, PlayerRegistration)
     | Error e -> Assert.Fail(e)
 
@@ -40,13 +49,20 @@ let ``Single Player Readying Doesn't Start Game`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = Some Grack
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
     match game with
     | Ok g ->
-        Assert.AreEqual(g.Players[0], { initialGame.Players[0] with Ready = true })
+        Assert.AreEqual(
+            g.Players[0],
+            { initialGame.Players[0] with
+                Ready = true }
+        )
+
         Assert.AreEqual(g.State, PlayerRegistration)
     | Error e -> Assert.Fail(e)
 
@@ -60,18 +76,27 @@ let ``All Players Readying Starts Game`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = Some Grack
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
     match game with
     | Ok g ->
-        Assert.AreEqual(g.Players[0], { initialGame.Players[0] with Ready = true })
+        Assert.AreEqual(
+            g.Players[0],
+            { initialGame.Players[0] with
+                Ready = true }
+        )
+
         Assert.AreEqual(g.State, PlayerTurn(0))
     | Error e -> Assert.Fail(e)
 
@@ -85,7 +110,9 @@ let ``Cannot Ready Without Class Selected`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = None
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 
@@ -108,8 +135,7 @@ let ``Cannot Ready If Not In Game`` () =
 
 
 let invalidStates =
-    [| Ended(None); PlayerTurn(0) |]
-    |> Array.map (fun state -> TestCaseData(state))
+    [| Ended(None); PlayerTurn(0) |] |> Array.map (fun state -> TestCaseData(state))
 
 [<Test>]
 [<TestCaseSource("invalidStates")>]
@@ -124,7 +150,9 @@ let ``Invalid State`` (state: GameState) =
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.Ready initialGame.Players[0].Id)
 

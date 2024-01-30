@@ -13,12 +13,16 @@ let exampleGame =
              Name = Guid.NewGuid().ToString()
              Ready = true
              Class = Some Grack
-             Creatures = [||] }
+             Creatures = [||]
+             MutationDeck = [||]
+             MutationHand = [||] }
            { Id = Guid.NewGuid()
              Name = Guid.NewGuid().ToString()
              Ready = true
              Class = Some Grack
-             Creatures = [||] } |] }
+             Creatures = [||]
+             MutationDeck = [||]
+             MutationHand = [||] } |] }
 
 [<Test>]
 let GetPlayerById () =
@@ -52,5 +56,7 @@ let UpdatePlayer () =
     let updatedGame =
         exampleGame
         |> GameUtils.UpdatePlayer secondPlayer.Id (fun p -> { p with Ready = false })
+
+    Assert.IsTrue(updatedGame.Players[1] = { secondPlayer with Ready = false })
 
     Assert.AreEqual(updatedGame.Players[1], { secondPlayer with Ready = false })

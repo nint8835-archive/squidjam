@@ -71,11 +71,11 @@ export default function Creature({
                 <div className="flex flex-1 justify-center">{creature.name}</div>
                 <div className="flex w-6 flex-row-reverse">{creature.attack}</div>
             </div>
-            <p className="p-1">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eleifend dolor ut porttitor lacinia.
-                Quisque vel blandit odio. Maecenas sed purus at purus fermentum scelerisque in non lorem. Vestibulum
-                euismod aliquam neque a luctus. Nunc.
-            </p>
+            <div>
+                {creature.mutations.map((mutation, mutationIndex) => (
+                    <div key={mutationIndex}>{JSON.stringify(mutation)}</div>
+                ))}
+            </div>
         </div>
     );
 }

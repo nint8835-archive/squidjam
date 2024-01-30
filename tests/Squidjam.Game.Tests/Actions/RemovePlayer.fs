@@ -14,7 +14,9 @@ let ``Player Not In Game`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.RemovePlayer(Guid.NewGuid()))
 
@@ -33,17 +35,23 @@ let ``Remove Player Who's Turn It Is - Beginning of Turn Order`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.RemovePlayer(initialGame.Players[0].Id))
@@ -53,9 +61,7 @@ let ``Remove Player Who's Turn It Is - Beginning of Turn Order`` () =
         Assert.AreEqual(
             g,
             { initialGame with
-                Players =
-                    [| initialGame.Players[1]
-                       initialGame.Players[2] |] }
+                Players = [| initialGame.Players[1]; initialGame.Players[2] |] }
         )
     | Error e -> Assert.Fail(e)
 
@@ -69,17 +75,23 @@ let ``Remove Player Who's Turn It Is - Middle of Turn Order`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.RemovePlayer(initialGame.Players[1].Id))
@@ -89,9 +101,7 @@ let ``Remove Player Who's Turn It Is - Middle of Turn Order`` () =
         Assert.AreEqual(
             g,
             { initialGame with
-                Players =
-                    [| initialGame.Players[0]
-                       initialGame.Players[2] |] }
+                Players = [| initialGame.Players[0]; initialGame.Players[2] |] }
         )
     | Error e -> Assert.Fail(e)
 
@@ -105,17 +115,23 @@ let ``Remove Player Who's Turn It Is - End of Turn Order`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.RemovePlayer(initialGame.Players[2].Id))
@@ -126,9 +142,7 @@ let ``Remove Player Who's Turn It Is - End of Turn Order`` () =
             g,
             { initialGame with
                 State = PlayerTurn(0)
-                Players =
-                    [| initialGame.Players[0]
-                       initialGame.Players[1] |] }
+                Players = [| initialGame.Players[0]; initialGame.Players[1] |] }
         )
     | Error e -> Assert.Fail(e)
 
@@ -142,12 +156,16 @@ let ``Remove Last Opponent`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.RemovePlayer(initialGame.Players[1].Id))
@@ -157,8 +175,7 @@ let ``Remove Last Opponent`` () =
         Assert.AreEqual(
             g,
             { initialGame with
-                // TODO: Once game ending is implemented, re-compute the winner when a player leaves and transition the state if so
-                // State = Ended(0)
+                State = Ended(Some(initialGame.Players[0].Id))
                 Players = [| initialGame.Players[0] |] }
         )
     | Error e -> Assert.Fail(e)
@@ -173,7 +190,9 @@ let ``Remove Last Player`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = false
                  Class = None
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game =
         Actions.Apply initialGame (Actions.RemovePlayer(initialGame.Players[0].Id))

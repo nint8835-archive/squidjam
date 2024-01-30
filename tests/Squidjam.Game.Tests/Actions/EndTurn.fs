@@ -15,17 +15,26 @@ let ``First Player`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0].Id)
 
     match game with
-    | Ok g -> Assert.AreEqual(g, { initialGame with State = PlayerTurn(1) })
+    | Ok g ->
+        Assert.AreEqual(
+            g,
+            { initialGame with
+                State = PlayerTurn(1) }
+        )
     | Error e -> Assert.Fail(e)
 
 [<Test>]
@@ -38,17 +47,26 @@ let ``Last Player`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[1].Id)
 
     match game with
-    | Ok g -> Assert.AreEqual(g, { initialGame with State = PlayerTurn(0) })
+    | Ok g ->
+        Assert.AreEqual(
+            g,
+            { initialGame with
+                State = PlayerTurn(0) }
+        )
     | Error e -> Assert.Fail(e)
 
 [<Test>]
@@ -61,12 +79,16 @@ let ``Not Player's Turn`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = [||] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0].Id)
 
@@ -91,7 +113,9 @@ let ``Invalid State`` (state: GameState) =
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = [||] } |] }
+                 Creatures = [||]
+                 MutationDeck = [||]
+                 MutationHand = [||] } |] }
 
     let game = Actions.Apply initialGame (Actions.EndTurn initialGame.Players[0].Id)
 
