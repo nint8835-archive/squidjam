@@ -1,6 +1,18 @@
 module Squidjam.Game.Mutations
 
-let ClassMutations =
-    Map<Class, Mutation array>([| (Class.Grack, [||]); (Class.Gump, [||]) |])
+[<Literal>]
+let GrackStickerID = "Grack Sticker"
 
-let Mutators = Map<string, Creature -> Creature> [||]
+let GrackSticker =
+    { Name = GrackStickerID
+      Description = "A sticker of Grack. Grants 5 health." }
+
+let ClassMutations =
+    Map<Class, Mutation array>([| (Class.Grack, [| GrackSticker |]); (Class.Gump, [| GrackSticker |]) |])
+
+let Mutators =
+    Map<string, Creature -> Creature>
+        [| (GrackStickerID,
+            fun creature ->
+                { creature with
+                    Health = creature.Health + 5 }) |]

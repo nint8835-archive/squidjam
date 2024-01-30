@@ -13,6 +13,20 @@ let checkWinState (game: Game) : Game =
     else
         game
 
+let rec drawMutation (player: Player) : Player =
+    if player.MutationDeck.Length = 0 then
+        drawMutation
+            { player with
+                // TODO: Shuffle deck
+                MutationDeck = Mutations.ClassMutations[player.Class.Value] }
+    else
+        let mutation = Array.head player.MutationDeck
+        let newMutationDeck = player.MutationDeck |> Array.skip 1
+
+        { player with
+            MutationHand = Array.append [| mutation |] player.MutationHand
+            MutationDeck = newMutationDeck }
+
 type Action =
     | EndTurn of Player: Guid
     | AddPlayer of Player: Guid * Name: string
@@ -30,7 +44,8 @@ let endTurn (game: Game) (player: Guid) : Result<Game, string> =
                 game
                 |> GameUtils.UpdatePlayer player (fun p ->
                     { p with
-                        Creatures = p.Creatures |> Array.map (fun c -> { c with HasAttacked = false }) })
+                        Creatures = p.Creatures |> Array.map (fun c -> { c with HasAttacked = false }) }
+                    |> drawMutation)
 
             Ok
                 { gameWithResetPlayerState with
@@ -100,9 +115,15 @@ let ready (game: Game) (playerGuid: Guid) : Result<Game, string> =
             updatedGame.Players |> Array.forall (fun p -> p.Ready)
             && updatedGame.Players.Length > 1
         then
+            let updatedPlayers =
+                updatedGame.Players
+                // TODO: Shuffle mutations before drawing
+                |> Array.map (fun p -> p |> drawMutation |> drawMutation |> drawMutation)
+
             Ok
                 { updatedGame with
-                    State = PlayerTurn 0 }
+                    State = PlayerTurn 0
+                    Players = updatedPlayers }
         else
             Ok updatedGame
 

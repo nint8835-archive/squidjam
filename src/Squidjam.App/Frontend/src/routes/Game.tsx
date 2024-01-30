@@ -19,7 +19,6 @@ export default function GamePage() {
                     <h1 className="text-2xl">{currentGame.id}</h1>
                     <div className="italic text-zinc-500">{stateFormatters[currentGame.state.type](currentGame)}</div>
                 </div>
-                2
                 <div className="flex-1 text-right">
                     <button
                         className="rounded-md border-[1px] border-zinc-500 p-2 text-zinc-500 transition-all hover:border-red-700 hover:bg-red-600 hover:text-white"

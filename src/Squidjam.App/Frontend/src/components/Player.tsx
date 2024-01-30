@@ -49,6 +49,8 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
                         <div className="flex flex-row items-center gap-2 text-xl">
                             {player.creatures.map((c) => c.health).reduce((partialSum, a) => partialSum + a, 0)}
                             <span className="text-sm">HP</span>
+                            {player.mutationHand.length}
+                            <span className="text-sm">Mutations</span>
                         </div>
                     </div>
                 )}
@@ -102,6 +104,18 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
                     <Creature creature={creature} creatureIndex={creatureIndex} player={player} />
                 ))}
             </div>
+
+            {/* Mutation UI */}
+            {isCurrentPlayer && player.mutationHand.length > 0 && (
+                <div className="flex w-full flex-row justify-between gap-4 overflow-auto pt-2">
+                    {player.mutationHand.map((mutation, mutationIndex) => (
+                        <div key={mutationIndex} className="rounded-md bg-black bg-opacity-25 p-2">
+                            <div>{mutation.name}</div>
+                            <div>{mutation.description}</div>
+                        </div>
+                    ))}
+                </div>
+            )}
 
             {/* Class selection / ready-up UI */}
             {gameState.type === 'PlayerRegistration' && isCurrentPlayer && (
