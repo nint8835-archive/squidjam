@@ -92,7 +92,9 @@ export default function Creature({
             </div>
             <div>
                 {creature.mutations.map((mutation, mutationIndex) => (
-                    <div key={mutationIndex}>{JSON.stringify(mutation)}</div>
+                    <div key={mutationIndex} className="flex justify-center">
+                        {mutation ? <div>{mutation.name}</div> : <div className="italic opacity-75">Empty</div>}
+                    </div>
                 ))}
             </div>
         </div>
