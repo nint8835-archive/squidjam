@@ -60,19 +60,25 @@ let addPlayer (game: Game) (playerGuid: Guid) (playerName: string) : Result<Game
         Ok { game with Players = newPlayerArray }
 
 let removePlayer (game: Game) (playerGuid: Guid) : Result<Game, string> =
-    if game.Players |> Array.exists (fun p -> p.Id = playerGuid) then
-        let newPlayerArray = game.Players |> Array.filter (fun p -> p.Id <> playerGuid)
+    // TODO: Test leaving an ended game
+    // TODO: Test leaving a game giving the other player the win
+    match game.State with
+    | Ended _ -> Error "The game has already ended"
+    | _ ->
+        if game.Players |> Array.exists (fun p -> p.Id = playerGuid) then
+            let newPlayerArray = game.Players |> Array.filter (fun p -> p.Id <> playerGuid)
 
-        Ok
-            { game with
-                Players = newPlayerArray
-                State =
-                    match game.State with
-                    | PlayerTurn _ when newPlayerArray.Length = 0 -> Ended(None)
-                    | PlayerTurn playerIndex -> PlayerTurn(playerIndex % newPlayerArray.Length)
-                    | _ -> game.State }
-    else
-        Error "You are not in this game"
+            Ok
+                { game with
+                    Players = newPlayerArray
+                    State =
+                        match game.State with
+                        | PlayerTurn _ when newPlayerArray.Length = 0 -> Ended(None)
+                        | PlayerTurn _ when newPlayerArray.Length = 1 -> Ended(Some newPlayerArray[0].Id)
+                        | PlayerTurn playerIndex -> PlayerTurn(playerIndex % newPlayerArray.Length)
+                        | _ -> game.State }
+        else
+            Error "You are not in this game"
 
 let ready (game: Game) (playerGuid: Guid) : Result<Game, string> =
     let player = GameUtils.GetPlayerById game playerGuid
