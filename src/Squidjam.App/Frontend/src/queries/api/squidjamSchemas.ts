@@ -91,6 +91,28 @@ export type Gump = {
 
 export type GumpEnum = 'Gump';
 
+export type Mutate = {
+    type: MutateEnum;
+    /**
+     * @format uuid
+     */
+    player: string;
+    /**
+     * @format int32
+     */
+    mutationIndex: number;
+    /**
+     * @format uuid
+     */
+    targetPlayer: string;
+    /**
+     * @format int32
+     */
+    targetCreatureIndex: number;
+};
+
+export type MutateEnum = 'Mutate';
+
 export type Mutation = {
     name: string;
     description: string;

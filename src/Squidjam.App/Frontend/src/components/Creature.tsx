@@ -23,6 +23,8 @@ export default function Creature({
         playerId: currentPlayer,
         setAttackingCreatureIndex,
         attackingCreatureIndex,
+        selectedMutationIndex,
+        setSelectedMutationIndex,
         currentGame: { id: gameId, state, players },
     } = useStore();
     const { mutateAsync: performAction } = usePerformAction({ onError: (err) => toast.error(err.stack) });
@@ -44,6 +46,21 @@ export default function Creature({
             )}
             onClick={async () => {
                 if (!isCurrentPlayersTurn) return;
+
+                if (selectedMutationIndex !== undefined) {
+                    await performAction({
+                        pathParams: { gameId },
+                        body: {
+                            type: 'Mutate',
+                            player: currentPlayer,
+                            targetPlayer: player.id,
+                            targetCreatureIndex: creatureIndex,
+                            mutationIndex: selectedMutationIndex,
+                        },
+                    });
+                    setSelectedMutationIndex(undefined);
+                    return;
+                }
 
                 if (isCurrentPlayersCreature && attackingCreatureIndex === undefined) {
                     setAttackingCreatureIndex(creatureIndex);

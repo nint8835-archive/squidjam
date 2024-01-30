@@ -128,7 +128,8 @@ export type PerformActionVariables = {
         | Schemas.RemovePlayer
         | Schemas.Ready
         | Schemas.SelectClass
-        | Schemas.Attack;
+        | Schemas.Attack
+        | Schemas.Mutate;
     pathParams: PerformActionPathParams;
 } & SquidjamContext['fetcherOptions'];
 
@@ -141,7 +142,8 @@ export const fetchPerformAction = (variables: PerformActionVariables, signal?: A
         | Schemas.RemovePlayer
         | Schemas.Ready
         | Schemas.SelectClass
-        | Schemas.Attack,
+        | Schemas.Attack
+        | Schemas.Mutate,
         {},
         {},
         PerformActionPathParams

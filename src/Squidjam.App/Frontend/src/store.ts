@@ -13,6 +13,9 @@ export interface Store {
     attackingCreatureIndex?: number;
     setAttackingCreatureIndex: (index?: number) => void;
 
+    selectedMutationIndex?: number;
+    setSelectedMutationIndex: (index?: number) => void;
+
     currentGame: Schema.Game;
     signalRConnection?: signalR.HubConnection;
     signalRState: signalR.HubConnectionState;
@@ -31,6 +34,9 @@ export const useStore = create<Store>()(
 
                 setAttackingCreatureIndex: (index) =>
                     set({ attackingCreatureIndex: index }, undefined, 'setAttackingCreatureIndex'),
+
+                setSelectedMutationIndex: (index) =>
+                    set({ selectedMutationIndex: index }, undefined, 'setSelectedMutationIndex'),
 
                 signalRState: signalR.HubConnectionState.Disconnected,
                 currentGame: { id: '', players: [], state: { type: 'PlayerRegistration' } },
@@ -51,7 +57,7 @@ export const useStore = create<Store>()(
 
                     connection.on('GameUpdated', (game: Schema.Game) => {
                         set(
-                            { currentGame: game, attackingCreatureIndex: undefined },
+                            { currentGame: game, attackingCreatureIndex: undefined, selectedMutationIndex: undefined },
                             undefined,
                             'updateGameFromSignalR',
                         );

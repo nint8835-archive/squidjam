@@ -34,6 +34,7 @@ type Action =
     | Ready of Player: Guid
     | SelectClass of Player: Guid * Class: Class
     | Attack of Player: Guid * AttackingCreatureIndex: int * TargetPlayer: Guid * TargetCreatureIndex: int
+    | Mutate of Player: Guid * MutationIndex: int * TargetPlayer: Guid * TargetCreatureIndex: int
 
 let endTurn (game: Game) (player: Guid) : Result<Game, string> =
     match game.State with
@@ -205,6 +206,69 @@ let attack
                 |> Ok
     | _ -> Error $"Unable to attack in game state %s{game.State.GetType().Name}"
 
+// TODO: Test
+let mutate
+    (game: Game)
+    (playerGuid: Guid)
+    (mutationIndex: int)
+    (targetPlayerGuid: Guid)
+    (targetCreatureIndex: int)
+    : Result<Game, string> =
+    let attackingPlayerOpt = GameUtils.GetPlayerById game playerGuid
+    let targetPlayerOpt = GameUtils.GetPlayerById game targetPlayerGuid
+
+    match game.State with
+    | PlayerTurn playerIndex ->
+        if attackingPlayerOpt.IsNone then
+            Error "You are not in this game"
+        else if targetPlayerOpt.IsNone then
+            Error "The target player is not in this game"
+        else if GameUtils.GetPlayerIndex game playerGuid <> playerIndex then
+            Error "You cannot mutate when it is not your turn"
+        else
+            let attackingPlayer = attackingPlayerOpt.Value
+            let targetPlayer = targetPlayerOpt.Value
+
+            let mutationOpt = attackingPlayer.MutationHand |> Array.tryItem mutationIndex
+            let targetCreatureOpt = targetPlayer.Creatures |> Array.tryItem targetCreatureIndex
+
+            // TODO: Resource requirement
+            if targetCreatureOpt.IsNone then
+                Error "The target creature does not exist"
+            else if mutationOpt.IsNone then
+                Error "The mutation does not exist"
+            else
+                let mutation = mutationOpt.Value
+                let targetCreature = targetCreatureOpt.Value
+
+                let targetMutationSlotIndex =
+                    targetCreature.Mutations |> Array.tryFindIndex Option.isNone
+
+                if targetMutationSlotIndex.IsNone then
+                    Error "The target creature has no mutation slots left"
+                else
+                    let mutatedCreature = targetCreature |> Mutations.Mutators[mutation.Name]
+
+                    let updatedTarget =
+                        { mutatedCreature with
+                            Mutations =
+                                targetCreature.Mutations
+                                |> Array.updateAt targetMutationSlotIndex.Value (Some mutation) }
+
+                    game
+                    |> GameUtils.UpdatePlayer targetPlayerGuid (fun p ->
+                        { p with
+                            Creatures =
+                                p.Creatures
+                                |> Array.updateAt targetCreatureIndex updatedTarget
+                                |> Array.filter (fun c -> c.Health > 0) })
+                    |> GameUtils.UpdatePlayer playerGuid (fun p ->
+                        { p with
+                            MutationHand = p.MutationHand |> Array.removeAt mutationIndex })
+                    |> checkWinState
+                    |> Ok
+    | _ -> Error $"Unable to mutate in game state %s{game.State.GetType().Name}"
+
 
 let Apply (game: Game) (action: Action) : Result<Game, string> =
     match action with
@@ -215,3 +279,5 @@ let Apply (game: Game) (action: Action) : Result<Game, string> =
     | SelectClass(player, newClass) -> selectClass game player newClass
     | Attack(player, attackingCreatureIndex, targetPlayer, targetCreatureIndex) ->
         attack game player attackingCreatureIndex targetPlayer targetCreatureIndex
+    | Mutate(playerGuid, mutationIndex, targetPlayerGuid, targetCreatureIndex) ->
+        mutate game playerGuid mutationIndex targetPlayerGuid targetCreatureIndex

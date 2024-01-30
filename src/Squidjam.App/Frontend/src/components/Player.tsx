@@ -23,6 +23,9 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
     const {
         currentGame: { id: gameId, state: gameState, players },
         playerId: currentPlayer,
+        selectedMutationIndex,
+        setSelectedMutationIndex,
+        setAttackingCreatureIndex,
     } = useStore();
     const { mutateAsync: performAction } = usePerformAction({ onError: (err) => toast.error(err.stack) });
 
@@ -109,7 +112,21 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
             {isCurrentPlayer && player.mutationHand.length > 0 && (
                 <div className="flex w-full flex-row justify-between gap-4 overflow-auto pt-2">
                     {player.mutationHand.map((mutation, mutationIndex) => (
-                        <div key={mutationIndex} className="rounded-md bg-black bg-opacity-25 p-2">
+                        <div
+                            key={mutationIndex}
+                            className="rounded-md bg-black bg-opacity-25 p-2"
+                            onClick={() => {
+                                if (!isPlayersTurn) return;
+
+                                setAttackingCreatureIndex(undefined);
+
+                                if (selectedMutationIndex === mutationIndex) {
+                                    setSelectedMutationIndex(undefined);
+                                } else {
+                                    setSelectedMutationIndex(mutationIndex);
+                                }
+                            }}
+                        >
                             <div>{mutation.name}</div>
                             <div>{mutation.description}</div>
                         </div>
