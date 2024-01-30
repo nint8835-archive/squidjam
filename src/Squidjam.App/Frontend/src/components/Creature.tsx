@@ -32,6 +32,7 @@ export default function Creature({
     const isCurrentPlayersCreature = player.id === currentPlayer;
     const isCurrentPlayersTurn =
         state.type === 'PlayerTurn' && state.playerIndex === players.findIndex((p) => p.id === currentPlayer);
+    const isMutatable = creature.mutations.filter((m) => m === null).length > 0;
 
     return (
         <div
@@ -43,6 +44,7 @@ export default function Creature({
                     'cursor-pointer hover:border-emerald-500',
                 isCurrentPlayersCreature && attackingCreatureIndex === creatureIndex && 'border-emerald-600',
                 creature.hasAttacked && 'opacity-50',
+                selectedMutationIndex !== undefined && isMutatable && 'cursor-pointer hover:border-pink-500',
             )}
             onClick={async () => {
                 if (!isCurrentPlayersTurn) return;

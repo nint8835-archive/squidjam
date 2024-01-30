@@ -114,7 +114,11 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
                     {player.mutationHand.map((mutation, mutationIndex) => (
                         <div
                             key={mutationIndex}
-                            className="rounded-md bg-black bg-opacity-25 p-2"
+                            className={cn(
+                                'rounded-md border-[1px] bg-black bg-opacity-25 p-2 transition-all',
+                                isPlayersTurn && 'cursor-pointer hover:border-pink-500',
+                                selectedMutationIndex === mutationIndex && 'border-pink-600',
+                            )}
                             onClick={() => {
                                 if (!isPlayersTurn) return;
 
