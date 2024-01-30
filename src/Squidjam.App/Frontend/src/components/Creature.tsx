@@ -93,7 +93,11 @@ export default function Creature({
             <div>
                 {creature.mutations.map((mutation, mutationIndex) => (
                     <div key={mutationIndex} className="flex justify-center">
-                        {mutation ? <div>{mutation.name}</div> : <div className="italic opacity-75">Empty</div>}
+                        {mutation ? (
+                            <div title={mutation.description}>{mutation.name}</div>
+                        ) : (
+                            <div className="italic opacity-75">Empty</div>
+                        )}
                     </div>
                 ))}
             </div>
