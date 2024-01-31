@@ -151,11 +151,11 @@ let attack
     (game: Game)
     (player: Guid)
     (attackingCreatureIndex: int)
-    (targetPlayer: Guid)
+    (targetPlayerGuid: Guid)
     (targetCreatureIndex: int)
     : Result<Game, String> =
     let attackingPlayerOpt = GameUtils.GetPlayerById game player
-    let targetPlayerOpt = GameUtils.GetPlayerById game targetPlayer
+    let targetPlayerOpt = GameUtils.GetPlayerById game targetPlayerGuid
 
     match game.State with
     | PlayerTurn playerIndex ->
@@ -196,16 +196,43 @@ let attack
                 game
                 |> GameUtils.UpdatePlayer player (fun p ->
                     { p with
-                        Creatures =
-                            p.Creatures
-                            |> Array.updateAt attackingCreatureIndex updatedAttacker
-                            |> Array.filter (fun c -> c.Health > 0) })
+                        Creatures = p.Creatures |> Array.updateAt attackingCreatureIndex updatedAttacker })
                 |> GameUtils.UpdatePlayer targetPlayer.Id (fun p ->
                     { p with
-                        Creatures =
-                            p.Creatures
-                            |> Array.updateAt targetCreatureIndex updatedTarget
-                            |> Array.filter (fun c -> c.Health > 0) })
+                        Creatures = p.Creatures |> Array.updateAt targetCreatureIndex updatedTarget })
+                |> (fun g ->
+                    attackingCreature.Mutations
+                    |> Array.filter Option.isSome
+                    |> Array.fold
+                        (fun g m ->
+                            g
+                            |> Mutations.applyMutator
+                                Mutations.Mutators[m.Value.Name].OnAttacking
+                                { AttackingPlayer = player
+                                  AttackingCreatureIndex = attackingCreatureIndex
+                                  DefendingPlayer = targetPlayerGuid
+                                  DefendingCreatureIndex = targetCreatureIndex })
+                        g)
+                |> (fun g ->
+                    targetCreature.Mutations
+                    |> Array.filter Option.isSome
+                    |> Array.fold
+                        (fun g m ->
+                            g
+                            |> Mutations.applyMutator
+                                Mutations.Mutators[m.Value.Name].OnDefending
+                                { AttackingPlayer = player
+                                  AttackingCreatureIndex = attackingCreatureIndex
+                                  DefendingPlayer = targetPlayerGuid
+                                  DefendingCreatureIndex = targetCreatureIndex })
+                        g)
+                |> (fun g ->
+                    { g with
+                        Players =
+                            g.Players
+                            |> Array.map (fun p ->
+                                { p with
+                                    Creatures = p.Creatures |> Array.filter (fun c -> c.Health > 0) }) })
                 |> checkWinState
                 |> Ok
     | _ -> Error $"Unable to attack in game state %s{game.State.GetType().Name}"

@@ -10,17 +10,17 @@ let Rat =
 let ClassCreatures =
     Map<Class, Creature array>(
         [ (Class.Grack,
-           [| { Name = "???"
+           [| { Name = "Borob"
                 Health = 10
                 Attack = 5
                 HasAttacked = false
                 Mutations = Array.create 5 None }
-              { Name = "???"
+              { Name = "Borik"
                 Health = 15
                 Attack = 3
                 HasAttacked = false
                 Mutations = Array.create 3 None }
-              { Name = "???"
+              { Name = "Gik"
                 Health = 10
                 Attack = 5
                 HasAttacked = false

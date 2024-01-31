@@ -47,7 +47,22 @@ type OnApplyMutatorArgs =
       TargetPlayer: Guid
       TargetCreatureIndex: int }
 
+type OnAttackMutatorArgs =
+    { AttackingPlayer: Guid
+      AttackingCreatureIndex: int
+      DefendingPlayer: Guid
+      DefendingCreatureIndex: int }
+
 type MutatorFunc<'args> = 'args -> Game -> Game
 
 type Mutator =
-    { OnApply: MutatorFunc<OnApplyMutatorArgs> option }
+    {
+        /// Mutator that is executed when the mutation is applied to a creature
+        OnApply: MutatorFunc<OnApplyMutatorArgs> option
+
+        /// Mutator that is executed when the creature is attacking another creature
+        OnAttacking: MutatorFunc<OnAttackMutatorArgs> option
+
+        /// Mutator that is executed when the creature is attacked by another creature
+        OnDefending: MutatorFunc<OnAttackMutatorArgs> option
+    }

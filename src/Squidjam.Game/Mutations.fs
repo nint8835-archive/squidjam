@@ -1,5 +1,6 @@
 module Squidjam.Game.Mutations
 
+
 let applyMutator (mutator: MutatorFunc<'a> option) (args: 'a) (game: Game) : Game =
     match mutator with
     | Some(mutatorFunc) -> mutatorFunc args game
@@ -32,4 +33,7 @@ let ClassMutations =
 
 let Mutators =
     Map<string, Mutator>
-        [| (GrackStickerID, { OnApply = Some(simpleCreatureMutator (fun c -> { c with Health = c.Health + 5 })) }) |]
+        [| (GrackStickerID,
+            { OnApply = Some(simpleCreatureMutator (fun c -> { c with Health = c.Health + 5 }))
+              OnAttacking = None
+              OnDefending = None }) |]
