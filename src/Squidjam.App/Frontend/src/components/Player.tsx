@@ -121,6 +121,7 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
                                 isPlayersTurn &&
                                     mutation.energyCost <= player.remainingEnergy &&
                                     'cursor-pointer hover:border-pink-500',
+                                mutation.energyCost > player.remainingEnergy && 'opacity-50',
                                 selectedMutationIndex === mutationIndex && 'border-pink-600',
                             )}
                             onClick={() => {
@@ -136,8 +137,11 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
                                 }
                             }}
                         >
-                            <div>{mutation.name}</div>
-                            <div>{mutation.description}</div>
+                            <div className="flex flex-row items-center justify-between">
+                                <div className="text-xl">{mutation.name}</div>
+                                <div>{mutation.energyCost} energy</div>
+                            </div>
+                            <div className="italic">{mutation.description}</div>
                         </div>
                     ))}
                 </div>
