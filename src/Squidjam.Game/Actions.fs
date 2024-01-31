@@ -67,6 +67,8 @@ let addPlayer (game: Game) (playerGuid: Guid) (playerName: string) : Result<Game
               Ready = false
               Class = None
               Creatures = [||]
+              RemainingEnergy = 1
+              MaxEnergy = 1
               MutationDeck = [||]
               MutationHand = [||] }
 

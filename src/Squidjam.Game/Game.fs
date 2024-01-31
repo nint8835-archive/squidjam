@@ -29,6 +29,9 @@ type Player =
       Class: Class option
       Creatures: Creature array
 
+      RemainingEnergy: int
+      MaxEnergy: int
+
       MutationDeck: Mutation array
       MutationHand: Mutation array }
 

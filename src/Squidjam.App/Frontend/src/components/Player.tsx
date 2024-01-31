@@ -54,6 +54,8 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
                             <span className="text-sm">HP</span>
                             {player.mutationHand.length}
                             <span className="text-sm">Mutations</span>
+                            {`${player.remainingEnergy}/${player.maxEnergy}`}
+                            <span className="text-sm">Energy</span>
                         </div>
                     </div>
                 )}

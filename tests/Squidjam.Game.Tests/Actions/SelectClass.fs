@@ -16,6 +16,8 @@ let ``With No Current Class`` () =
                  Ready = true
                  Class = None
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 
@@ -40,6 +42,8 @@ let ``With Current Class`` () =
                  Ready = true
                  Class = Some Grack
                  Creatures = Creatures.ClassCreatures[Grack]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = Mutations.ClassMutations[Grack]
                  MutationHand = [||] } |] }
 
@@ -70,6 +74,8 @@ let ``Invalid State`` (state: GameState) =
                  Ready = true
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 

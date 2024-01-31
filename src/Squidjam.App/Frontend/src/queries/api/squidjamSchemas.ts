@@ -127,6 +127,14 @@ export type Player = {
     ready: boolean;
     ['class']: Grack | Gump | null;
     creatures: Creature[];
+    /**
+     * @format int32
+     */
+    remainingEnergy: number;
+    /**
+     * @format int32
+     */
+    maxEnergy: number;
     mutationDeck: Mutation[];
     mutationHand: Mutation[];
 };

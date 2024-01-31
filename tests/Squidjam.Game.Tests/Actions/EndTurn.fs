@@ -15,14 +15,18 @@ let ``First Player`` () =
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = [||]
+                 Creatures = Creatures.ClassCreatures[Grack]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] }
                { Id = Guid.NewGuid()
                  Name = Guid.NewGuid().ToString()
                  Ready = true
                  Class = Some Grack
-                 Creatures = [||]
+                 Creatures = Creatures.ClassCreatures[Grack]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 
@@ -33,7 +37,12 @@ let ``First Player`` () =
         Assert.AreEqual(
             g,
             { initialGame with
-                State = PlayerTurn(1) }
+                State = PlayerTurn(1)
+                Players =
+                    [| { initialGame.Players[0] with
+                           MutationHand = [| Mutations.GrackSticker |]
+                           MutationDeck = [||] }
+                       initialGame.Players[1] |] }
         )
     | Error e -> Assert.Fail(e)
 
@@ -48,6 +57,8 @@ let ``Last Player`` () =
                  Ready = true
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] }
                { Id = Guid.NewGuid()
@@ -55,6 +66,8 @@ let ``Last Player`` () =
                  Ready = true
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 
@@ -65,7 +78,12 @@ let ``Last Player`` () =
         Assert.AreEqual(
             g,
             { initialGame with
-                State = PlayerTurn(0) }
+                State = PlayerTurn(0)
+                Players =
+                    [| initialGame.Players[0]
+                       { initialGame.Players[1] with
+                           MutationHand = [| Mutations.GrackSticker |]
+                           MutationDeck = [||] } |] }
         )
     | Error e -> Assert.Fail(e)
 
@@ -80,6 +98,8 @@ let ``Not Player's Turn`` () =
                  Ready = true
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] }
                { Id = Guid.NewGuid()
@@ -87,6 +107,8 @@ let ``Not Player's Turn`` () =
                  Ready = true
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 
@@ -114,6 +136,8 @@ let ``Invalid State`` (state: GameState) =
                  Ready = true
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 

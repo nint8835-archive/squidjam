@@ -16,6 +16,8 @@ let ``Ready Player`` () =
                  Ready = false
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] }
                { Id = Guid.NewGuid()
@@ -23,6 +25,8 @@ let ``Ready Player`` () =
                  Ready = false
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 
@@ -50,6 +54,8 @@ let ``Single Player Readying Doesn't Start Game`` () =
                  Ready = false
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 
@@ -77,6 +83,8 @@ let ``All Players Readying Starts Game`` () =
                  Ready = false
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] }
                { Id = Guid.NewGuid()
@@ -84,6 +92,8 @@ let ``All Players Readying Starts Game`` () =
                  Ready = true
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 
@@ -94,7 +104,8 @@ let ``All Players Readying Starts Game`` () =
         Assert.AreEqual(
             g.Players[0],
             { initialGame.Players[0] with
-                Ready = true }
+                Ready = true
+                MutationHand = [| Mutations.GrackSticker; Mutations.GrackSticker; Mutations.GrackSticker |] }
         )
 
         Assert.AreEqual(g.State, PlayerTurn(0))
@@ -111,6 +122,8 @@ let ``Cannot Ready Without Class Selected`` () =
                  Ready = true
                  Class = None
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 
@@ -151,6 +164,8 @@ let ``Invalid State`` (state: GameState) =
                  Ready = true
                  Class = Some Grack
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 

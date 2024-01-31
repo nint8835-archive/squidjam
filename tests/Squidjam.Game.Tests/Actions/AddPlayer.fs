@@ -38,6 +38,8 @@ let ``Single Player`` () =
           Ready = false
           Class = None
           Creatures = [||]
+          RemainingEnergy = 1
+          MaxEnergy = 1
           MutationDeck = [||]
           MutationHand = [||] }
 
@@ -66,6 +68,8 @@ let ``Multiple Players Are Shuffled`` () =
           Ready = false
           Class = None
           Creatures = [||]
+          RemainingEnergy = 1
+          MaxEnergy = 1
           MutationDeck = [||]
           MutationHand = [||] }
 
@@ -75,6 +79,8 @@ let ``Multiple Players Are Shuffled`` () =
           Ready = false
           Class = None
           Creatures = [||]
+          RemainingEnergy = 1
+          MaxEnergy = 1
           MutationDeck = [||]
           MutationHand = [||] }
 
@@ -84,6 +90,8 @@ let ``Multiple Players Are Shuffled`` () =
           Ready = false
           Class = None
           Creatures = [||]
+          RemainingEnergy = 1
+          MaxEnergy = 1
           MutationDeck = [||]
           MutationHand = [||] }
 
@@ -121,6 +129,8 @@ let ``Unable To Add Player Already In Game`` () =
                  Ready = false
                  Class = None
                  Creatures = [||]
+                 RemainingEnergy = 0
+                 MaxEnergy = 0
                  MutationDeck = [||]
                  MutationHand = [||] } |] }
 

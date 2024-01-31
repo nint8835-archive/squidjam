@@ -14,6 +14,8 @@ let exampleGame =
              Ready = true
              Class = Some Grack
              Creatures = [||]
+             RemainingEnergy = 0
+             MaxEnergy = 0
              MutationDeck = [||]
              MutationHand = [||] }
            { Id = Guid.NewGuid()
@@ -21,6 +23,8 @@ let exampleGame =
              Ready = true
              Class = Some Grack
              Creatures = [||]
+             RemainingEnergy = 0
+             MaxEnergy = 0
              MutationDeck = [||]
              MutationHand = [||] } |] }
 
