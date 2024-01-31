@@ -116,6 +116,10 @@ export type MutateEnum = 'Mutate';
 export type Mutation = {
     name: string;
     description: string;
+    /**
+     * @format int32
+     */
+    energyCost: number;
 };
 
 export type Player = {

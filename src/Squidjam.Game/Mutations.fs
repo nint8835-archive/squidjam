@@ -5,7 +5,8 @@ let GrackStickerID = "Grack Sticker"
 
 let GrackSticker =
     { Name = GrackStickerID
-      Description = "A sticker of Grack. Grants 5 health." }
+      Description = "A sticker of Grack. Grants 5 health."
+      EnergyCost = 3 }
 
 let ClassMutations =
     Map<Class, Mutation array>([| (Class.Grack, [| GrackSticker |]); (Class.Gump, [| GrackSticker |]) |])

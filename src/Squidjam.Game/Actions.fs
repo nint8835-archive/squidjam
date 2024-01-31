@@ -45,6 +45,8 @@ let endTurn (game: Game) (player: Guid) : Result<Game, string> =
                 game
                 |> GameUtils.UpdatePlayer player (fun p ->
                     { p with
+                        RemainingEnergy = Math.Min(p.MaxEnergy + 1, 10)
+                        MaxEnergy = Math.Min(p.MaxEnergy + 1, 10)
                         Creatures = p.Creatures |> Array.map (fun c -> { c with HasAttacked = false }) }
                     |> drawMutation)
 
@@ -239,6 +241,8 @@ let mutate
                 Error "The target creature does not exist"
             else if mutationOpt.IsNone then
                 Error "The mutation does not exist"
+            else if attackingPlayer.RemainingEnergy < mutationOpt.Value.EnergyCost then
+                Error "You do not have enough energy to mutate"
             else
                 let mutation = mutationOpt.Value
                 let targetCreature = targetCreatureOpt.Value
@@ -266,6 +270,7 @@ let mutate
                                 |> Array.filter (fun c -> c.Health > 0) })
                     |> GameUtils.UpdatePlayer playerGuid (fun p ->
                         { p with
+                            RemainingEnergy = p.RemainingEnergy - mutation.EnergyCost
                             MutationHand = p.MutationHand |> Array.removeAt mutationIndex })
                     |> checkWinState
                     |> Ok
