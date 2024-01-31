@@ -253,27 +253,35 @@ let mutate
                 if targetMutationSlotIndex.IsNone then
                     Error "The target creature has no mutation slots left"
                 else
-                    let mutatedCreature = targetCreature |> Mutations.Mutators[mutation.Name]
+                    let gameWithCreatureWithMutation =
+                        game
+                        |> GameUtils.UpdatePlayer targetPlayer.Id (fun p ->
+                            { p with
+                                Creatures =
+                                    p.Creatures
+                                    |> Array.updateAt
+                                        targetCreatureIndex
+                                        { targetCreature with
+                                            Mutations =
+                                                targetCreature.Mutations
+                                                |> Array.updateAt targetMutationSlotIndex.Value (Some mutation) } })
 
-                    let updatedTarget =
-                        { mutatedCreature with
-                            Mutations =
-                                targetCreature.Mutations
-                                |> Array.updateAt targetMutationSlotIndex.Value (Some mutation) }
+                    let gameWithMutationRemoved =
+                        gameWithCreatureWithMutation
+                        |> GameUtils.UpdatePlayer playerGuid (fun p ->
+                            { p with
+                                RemainingEnergy = p.RemainingEnergy - mutation.EnergyCost
+                                MutationHand = p.MutationHand |> Array.removeAt mutationIndex })
 
-                    game
-                    |> GameUtils.UpdatePlayer targetPlayerGuid (fun p ->
-                        { p with
-                            Creatures =
-                                p.Creatures
-                                |> Array.updateAt targetCreatureIndex updatedTarget
-                                |> Array.filter (fun c -> c.Health > 0) })
-                    |> GameUtils.UpdatePlayer playerGuid (fun p ->
-                        { p with
-                            RemainingEnergy = p.RemainingEnergy - mutation.EnergyCost
-                            MutationHand = p.MutationHand |> Array.removeAt mutationIndex })
-                    |> checkWinState
-                    |> Ok
+                    let mutatedGame =
+                        gameWithMutationRemoved
+                        |> Mutations.applyMutator
+                            Mutations.Mutators[mutation.Name].OnApply
+                            { SourcePlayer = playerGuid
+                              TargetPlayer = targetPlayerGuid
+                              TargetCreatureIndex = targetCreatureIndex }
+
+                    mutatedGame |> checkWinState |> Ok
     | _ -> Error $"Unable to mutate in game state %s{game.State.GetType().Name}"
 
 

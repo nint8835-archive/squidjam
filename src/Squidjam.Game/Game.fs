@@ -41,3 +41,13 @@ type Game =
     { Id: Guid
       State: GameState
       Players: Player array }
+
+type OnApplyMutatorArgs =
+    { SourcePlayer: Guid
+      TargetPlayer: Guid
+      TargetCreatureIndex: int }
+
+type MutatorFunc<'args> = 'args -> Game -> Game
+
+type Mutator =
+    { OnApply: MutatorFunc<OnApplyMutatorArgs> option }
