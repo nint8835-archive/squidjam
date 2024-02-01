@@ -1,5 +1,6 @@
 module Squidjam.Game.Mutations
 
+open System
 
 let applyMutator (mutator: MutatorFunc<'a> option) (args: 'a) (game: Game) : Game =
     match mutator with
@@ -45,10 +46,18 @@ let HoloGrack =
         "A holographic sticker of Grack. Its shine distracts enemies, protecting a creature from a single attack."
       EnergyCost = 5 }
 
+[<Literal>]
+let RatKingID = "Rat King"
+
+let RatKing =
+    { Name = RatKingID
+      Description = "Merges three creatures into one. Does not consume a mutation slot."
+      EnergyCost = 5 }
+
 let ClassMutations =
     Map<Class, Mutation array>(
         [| (Class.Grack, [| GrackSticker; Borik; HoloGrack |])
-           (Class.Gump, [| GrackSticker |]) |]
+           (Class.Gump, [| RatKing |]) |]
     )
 
 let Mutators =
@@ -96,4 +105,49 @@ let Mutators =
                     g
                     |> GameUtils.UpdatePlayer args.DefendingPlayer (fun p ->
                         { p with
-                            Creatures = p.Creatures |> Array.updateAt args.DefendingCreatureIndex newDefendingCreature })) }) |]
+                            Creatures = p.Creatures |> Array.updateAt args.DefendingCreatureIndex newDefendingCreature })) })
+           (RatKingID,
+            { OnApply =
+                Some(fun args g ->
+                    let targetPlayerCreatures =
+                        GameUtils.GetPlayerById g args.TargetPlayer
+                        |> Option.get
+                        |> (fun p -> p.Creatures)
+
+                    let startIndex = Math.Max(0, args.TargetCreatureIndex - 1)
+
+                    let count =
+                        Math.Min(targetPlayerCreatures.Length - 1, args.TargetCreatureIndex + 1)
+                        - startIndex
+                        + 1
+
+                    let targetCreatures = targetPlayerCreatures |> Array.sub <|| (startIndex, count)
+
+                    let mergedTarget =
+                        targetCreatures
+                        |> Array.reduce (fun t c ->
+                            { t with
+                                Attack = t.Attack + c.Attack
+                                Health = t.Health + c.Health
+                                Mutations = Array.append t.Mutations c.Mutations })
+
+                    let finalizedMergedTarget =
+                        { mergedTarget with
+                            Name = "Rat King"
+                            Mutations =
+                                mergedTarget.Mutations
+                                |> Array.map (fun m ->
+                                    match m with
+                                    | None -> None
+                                    | Some(mutVal) when mutVal.Name = RatKingID -> None
+                                    | Some(value) -> Some(value)) }
+
+                    let newCreatures =
+                        targetPlayerCreatures
+                        |> Array.removeManyAt startIndex count
+                        |> Array.insertAt startIndex finalizedMergedTarget
+
+                    g
+                    |> GameUtils.UpdatePlayer args.TargetPlayer (fun p -> { p with Creatures = newCreatures }))
+              OnAttacking = None
+              OnDefending = None }) |]
