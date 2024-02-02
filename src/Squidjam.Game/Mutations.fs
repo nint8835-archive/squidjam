@@ -26,8 +26,8 @@ let GrackStickerID = "Grack Sticker"
 
 let GrackSticker =
     { Name = GrackStickerID
-      Description = "A sticker of Grack. Grants 5 health."
-      EnergyCost = 3 }
+      Description = "A sticker of Grack. Restores 1 health."
+      EnergyCost = 2 }
 
 [<Literal>]
 let BorikID = "borik!"
@@ -54,10 +54,18 @@ let RatKing =
       Description = "Merges three creatures into one. Does not consume a mutation slot."
       EnergyCost = 5 }
 
+[<Literal>]
+let ManchuWokID = "Manchu Wok"
+
+let ManchuWok =
+    { Name = ManchuWokID
+      Description = "A delicious, high quality meal from the UC. Restores 1 health."
+      EnergyCost = 2 }
+
 let ClassMutations =
     Map<Class, Mutation array>(
         [| (Class.Grack, [| GrackSticker; Borik; HoloGrack |])
-           (Class.Gump, [| RatKing |]) |]
+           (Class.Gump, [| ManchuWok; RatKing |]) |]
     )
 
 let Mutators =
@@ -149,5 +157,10 @@ let Mutators =
 
                     g
                     |> GameUtils.UpdatePlayer args.TargetPlayer (fun p -> { p with Creatures = newCreatures }))
+              OnAttacking = None
+              OnDefending = None })
+
+           (ManchuWokID,
+            { OnApply = Some(simpleCreatureMutator (fun c -> { c with Health = c.Health + 5 }))
               OnAttacking = None
               OnDefending = None }) |]
