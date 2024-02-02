@@ -27,6 +27,7 @@ export default function Creature({
         setSelectedMutationIndex,
         currentGame: { id: gameId, state, players },
     } = useStore();
+    //@ts-ignore
     const { mutateAsync: performAction } = usePerformAction({ onError: (err) => toast.error(err.stack) });
 
     const isCurrentPlayersCreature = player.id === currentPlayer;

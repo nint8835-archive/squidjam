@@ -27,6 +27,7 @@ export default function Player({ player, playerIndex }: { player: Schema.Player;
         setSelectedMutationIndex,
         setAttackingCreatureIndex,
     } = useStore();
+    //@ts-ignore
     const { mutateAsync: performAction } = usePerformAction({ onError: (err) => toast.error(err.stack) });
 
     const isCurrentPlayer = player.id === currentPlayer;

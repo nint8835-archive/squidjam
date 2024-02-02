@@ -7,6 +7,7 @@ import { stateFormatters } from '../util';
 
 export default function GamePage() {
     const { currentGame, playerId: currentPlayer } = useStore();
+    //@ts-ignore
     const { mutateAsync: performAction } = usePerformAction({ onError: (err) => toast.error(err.stack) });
 
     const navigate = useNavigate();

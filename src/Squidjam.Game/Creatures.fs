@@ -25,5 +25,5 @@ let ClassCreatures =
                 Attack = 5
                 HasAttacked = false
                 Mutations = Array.create 5 None } |])
-          (Class.Gump, Array.create 7 Rat) ]
+          (Class.Gump, Array.create 15 Rat) ]
     )

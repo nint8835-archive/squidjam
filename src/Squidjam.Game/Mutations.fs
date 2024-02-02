@@ -59,7 +59,7 @@ let ManchuWokID = "Manchu Wok"
 
 let ManchuWok =
     { Name = ManchuWokID
-      Description = "A delicious, high quality meal from the UC. Restores 1 health."
+      Description = "A delicious, high quality meal from the UC. Restores 5 health."
       EnergyCost = 2 }
 
 let ClassMutations =
